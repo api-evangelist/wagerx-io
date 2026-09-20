@@ -64,5 +64,10 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-WagerX is a company surfaced via the API Evangelist harvest backlog (source: a2a-registry) and added to the network as a stub for full-pipeline profiling.
-- https://wagerx.io/
+WagerX is an independent crypto-casino audit lab and gambling regulatory intelligence publisher. It exposes a free, anonymous, read-only API surface: REST feeds described by an OpenAPI 3.1 document, the "Wagie" agent over A2A JSON-RPC and MCP streamable-HTTP with Ed25519-signed evidence envelopes, a separate Tech Concierge MCP/A2A agent, and an Agentic Gambling Index of other providers' agent surfaces.
+
+- Website: https://wagerx.io/
+- Agent Gateway (docs): https://wagerx.io/agent-gateway
+- OpenAPI: https://wagerx.io/openapi.json
+- Agent Card: https://wagerx.io/.well-known/agent-card.json
+- MCP: https://wagerx.io/mcp

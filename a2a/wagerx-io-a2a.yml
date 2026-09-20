@@ -1,0 +1,219 @@
+generated: '2026-09-19'
+method: probed
+source: https://wagerx.io/.well-known/agent-card.json
+card:
+  file: a2a/wagerx-io-agent-card.json
+discovery:
+  path: /.well-known/agent-card.json
+  canonical: true
+  host: wagerx.io
+  note: >-
+    WagerX serves the canonical card at /.well-known/agent-card.json and the SAME body (8,618 bytes,
+    signatures differ by signing time) at the legacy /.well-known/agent.json alias, on both wagerx.io and
+    www.wagerx.io. The card is one of FOUR first-party agent cards on the host: Wagie (this file), the
+    WagerX Tech Concierge at /.well-known/tech-agent.json (alias /tech/.well-known/agent.json), and two
+    topic-scoped agents at /agents/canada/.well-known/agent-card.json and
+    /agents/anonymous/.well-known/agent-card.json. A fifth projection, /.well-known/google-agent-card.json,
+    is the Wagie card re-shaped for Google's agent directory. Ownership is not in question: provider.url is
+    https://wagerx.io, provider.contact info@wagerx.io matches the OpenAPI info.contact, every interface
+    URL is on wagerx.io, and wagerx.io/llms.txt names this exact URL as the canonical Agent Card.
+x-evidence:
+  fetched: '2026-09-19'
+  url: https://wagerx.io/.well-known/agent-card.json
+  http_status: 200
+  content_type: application/json
+  body_bytes: 8618
+  body_parses_as: JSON object with AgentCard shape
+  corroborating_probes:
+  - url: https://wagerx.io/.well-known/agent.json
+    http_status: 200
+    note: Legacy alias, identical body.
+  - url: https://www.wagerx.io/.well-known/agent-card.json
+    http_status: 200
+  - url: https://wagerx.io/a2a
+    http_status: 200
+    note: GET returns A2A discovery metadata (agent_card, versions [1.0, 0.3.0], usage instructions).
+  - url: https://wagerx.io/a2a
+    http_status: 200
+    note: >-
+      POST message/send (A2A 0.3.0) with the sample question "How many MCP services are indexed by WagerX?"
+      returned a JSON-RPC result with a text part and a data part carrying a SignedEvidenceEnvelope
+      (proof.type Ed25519Signature, key_id wagerx-ed25519-2026-v1, signed_field data). The agent surface is
+      live and callable anonymously.
+  - url: https://wagerx.io/.well-known/wagie-manifest.json
+    http_status: 200
+    note: Canonical contract the card projects from (contract_version 2026-09-01, full MCP tool inputSchemas).
+  - url: https://wagerx.io/.well-known/wagie-conformance.json
+    http_status: 200
+    note: Provider's own dated self-check — agent_card_consistency pass, a2a_readiness pass, status degraded (regulatory evidence projection).
+  - url: https://wagerx.io/.well-known/jwks.json
+    http_status: 200
+    note: ES256 JWK (kid wagerx-agent-card-es256-2026-v1) that the card's signatures[] JWS references.
+  - url: https://wagerx.io/.well-known/tech-agent.json
+    http_status: 200
+  - url: https://wagerx.io/agents/canada/.well-known/agent-card.json
+    http_status: 200
+  - url: https://wagerx.io/agents/anonymous/.well-known/agent-card.json
+    http_status: 200
+  - url: https://wagerx.io/.well-known/google-agent-card.json
+    http_status: 200
+agent_card:
+  name: Wagie — WagerX iGaming & Regulatory Intelligence Agent
+  description: >-
+    WagerX's evidence-led agent for crypto-casino audits, iGaming decisions, gambling regulatory
+    intelligence, official MCP/A2A directory lookup, and aggregate statistics from WagerX's selective Index
+    and observed traffic.
+  version: '2026-09-01'
+  last_updated: '2026-09-01'
+  agent_card_url: https://wagerx.io/.well-known/agent-card.json
+  provider:
+    organization: WagerX
+    url: https://wagerx.io
+    contact: info@wagerx.io
+  preferred_transport: JSONRPC
+  supported_interfaces:
+  - url: https://wagerx.io/a2a
+    protocol_binding: JSONRPC
+    protocol_version: '1.0'
+  - url: https://wagerx.io/a2a
+    protocol_binding: JSONRPC
+    protocol_version: 0.3.0
+  additional_interfaces:
+  - url: https://wagerx.io/a2a
+    transport: JSONRPC
+  - url: https://wagerx.io/mcp
+    transport: MCP/streamable-http
+  capabilities:
+    streaming: false
+    push_notifications: false
+    state_transition_history: false
+  security_schemes: {}
+  security_requirements: []
+  authentication:
+    public_endpoints: true
+    api_key_required: false
+  default_input_modes: [text/plain, application/json]
+  default_output_modes: [application/json, text/plain]
+  skill_count: 7
+  skills:
+  - id: agentic-service-directory
+    name: Official MCP and A2A directory lookup
+    tags: [mcp, a2a, directory, provenance]
+  - id: casino-audit
+    name: Casino audit evidence
+    tags: [igaming, casino, audit, real-money-test]
+  - id: casino-comparison
+    name: Evidence-led casino comparison
+    tags: [igaming, casino, comparison]
+  - id: casino-discovery
+    name: Audited casino discovery
+    tags: [igaming, casino, discovery]
+  - id: country-market-recommendations
+    name: Country-market casino recommendations
+    tags: [igaming, country, market-availability, evidence]
+  - id: bonus-intelligence
+    name: Bonus intelligence
+  - id: regulatory-intelligence
+    name: Regulatory intelligence
+  extensions_observed:
+    mcp:
+      endpoint: https://wagerx.io/mcp
+      transport: streamable-http
+      protocol_version: '2025-06-18'
+      tool_count: 12
+    contract: https://wagerx.io/.well-known/wagie-manifest.json
+    conformance: https://wagerx.io/.well-known/wagie-conformance.json
+    signing:
+      type: Ed25519Signature
+      public_key: https://wagerx.io/.well-known/wagerx-signing.json
+      signed_field: data
+    policies:
+      ai_disclosure: https://wagerx.io/wagerx-ai-policy
+      responsible_gambling: https://wagerx.io/responsible-gambling
+    ai_transparency: schema_version 1.0, ai_interaction true, system Wagie
+    signatures: one JWS (ES256, kid wagerx-agent-card-es256-2026-v1) over the card
+conformance:
+  spec: A2A 1.0.0
+  grade: conformant
+  protocol_version: '1.0'
+  preferred_transport: JSONRPC
+  transport: JSONRPC (supportedInterfaces[].protocolBinding)
+  hard_checks:
+    capabilities_is_object: true
+    protocol_version_present: true
+    skills_is_array: true
+  optional_fields:
+    default_input_modes: true
+    default_output_modes: true
+    preferred_transport: true
+  grade_basis: >-
+    capabilities is an OBJECT (streaming, pushNotifications, stateTransitionHistory as boolean fields).
+    protocolVersion is present, carried on supportedInterfaces[] as A2A 1.0.0 places it — the card declares
+    BOTH "1.0" and "0.3.0" against the same JSONRPC endpoint, which is the dual-dialect posture its /a2a
+    discovery document and manifest also state. skills is an ARRAY of seven fully-populated skills (id, name,
+    description, tags, examples, inputModes, outputModes). All three optional discriminators are present:
+    preferredTransport, defaultInputModes and defaultOutputModes.
+  deviations:
+  - field: protocolVersion
+    observed: on supportedInterfaces[], not at the top level; no top-level url either
+    note: >-
+      A 0.3.0-only reader expecting top-level url/protocolVersion finds neither. The card is consistently
+      1.0-shaped and additionally lists 0.3.0 in supportedInterfaces, so a 0.3.0 client is still told where
+      to POST — but through the 1.0 field, which such a client may not read.
+  - field: securitySchemes / securityRequirements / security
+    observed: empty object, empty array, empty array
+    note: Deliberate — the agent is anonymous and public; card.authentication says apiKeyRequired false.
+  - field: mcp, contract, conformance, signing, authentication, policies, aiTransparency, sampleQuestions, agentCardUrl, lastUpdated
+    observed: non-spec top-level extension fields
+    note: >-
+      Not A2A AgentCard fields. They are the most information-dense part of the card (MCP endpoint + tool
+      names, contract and conformance URLs, Ed25519 answer-signing key) but a strict reader will drop them;
+      A2A 1.0 would carry these under capabilities.extensions.
+  - field: signatures
+    observed: one AgentCardSignature (JWS, ES256) referencing /.well-known/jwks.json
+    note: Present and verifiable against the published JWK; signatures vary between the canonical and alias projections by signing time.
+sibling_cards:
+- name: WagerX Tech Concierge
+  file: a2a/wagerx-io-tech-agent-card.json
+  source: https://wagerx.io/.well-known/tech-agent.json
+  http_status: 200
+  alias: https://wagerx.io/tech/.well-known/agent.json
+  shape: A2A 0.3.0 (top-level url https://wagerx.io/tech/a2a, protocolVersion 0.3.0, version 1.0.0)
+  grade: conformant
+  grade_basis: capabilities is an object, top-level protocolVersion 0.3.0 present, skills is an array of nine; defaultInputModes/defaultOutputModes/preferredTransport all present.
+  skills: [get_local_time, get_public_holidays, get_exchange_rate, get_weather_forecast, get_us_weather_alerts, check_wallet_balance, explain_wallet_result, get_crypto_prices, convert_crypto_amount]
+  mcp: https://wagerx.io/tech/mcp (additionalInterfaces[]; tools/list answered 200 with 9 tools — see mcp/wagerx-io-tech-mcp-tools.json)
+  note: >-
+    The card's own url https://wagerx.io/tech/a2a answered 302 -> /tech/agents#a2a on GET and /tech/agents
+    answered 500 at probe time; the A2A POST surface for this agent was not exercised. The MCP interface it
+    declares is live.
+- name: Best Casinos in Canada — by WagerX
+  file: a2a/wagerx-io-canada-agent-card.json
+  source: https://wagerx.io/agents/canada/.well-known/agent-card.json
+  http_status: 200
+  alias: https://wagerx.io/agents/canada/.well-known/agent.json
+  shape: A2A 1.0 (supportedInterfaces[] JSONRPC 1.0 at /agents/canada/a2a plus an HTTP+JSON 2025-06-18 entry pointing at the MCP endpoint), version 2026-09-15
+  grade: near-conformant
+  grade_basis: capabilities object, protocolVersion on supportedInterfaces, skills array of one; defaultInputModes/defaultOutputModes are declared as bare "text"/"data" tokens rather than media types.
+  manifest: https://wagerx.io/agents/canada
+  mcp: https://wagerx.io/agents/canada/mcp (tools/list answered 503 "shared Canada service usage control is unavailable"; manifest names canada_casino_recommendations, canada_casino_availability, canada_review_evidence)
+- name: Best Anonymous Casinos — by WagerX
+  file: a2a/wagerx-io-anonymous-agent-card.json
+  source: https://wagerx.io/agents/anonymous/.well-known/agent-card.json
+  http_status: 200
+  alias: https://wagerx.io/agents/anonymous/.well-known/agent.json
+  shape: same 1.0 shape as the Canada card, version 2026-09-15
+  grade: near-conformant
+  grade_basis: same basis as the Canada card (bare "text"/"data" mode tokens).
+  manifest: https://wagerx.io/agents/anonymous
+  mcp: https://wagerx.io/agents/anonymous/mcp (tools/list answered 503; llms.txt names best_anonymous_casinos and anonymous_casino_evidence)
+notes:
+- >-
+  Every agent answer is wrapped in a SignedEvidenceEnvelope: {data, proof} where proof is an Ed25519
+  signature over the canonicalised data object (sorted keys, compact separators, ASCII-escaped) and the
+  public key is published at /.well-known/wagerx-signing.json. The provider's own claim boundary applies —
+  the signature proves origin and integrity, not truth.
+- >-
+  WagerX also runs the Agentic Gambling Index, a catalog of OTHER providers' MCP servers and A2A agents
+  (/agentic-gambling-index, catalog.json). Cards listed there belong to those providers and were not
+  harvested here.

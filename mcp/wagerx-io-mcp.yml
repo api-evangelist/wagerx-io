@@ -1,0 +1,164 @@
+generated: '2026-09-19'
+method: probed
+source: https://wagerx.io/agent-gateway
+docs: https://wagerx.io/agent-gateway
+summary: >-
+  WagerX operates FOUR first-party remote MCP servers on its apex domain, all anonymous (no API key), all
+  stateless streamable-HTTP JSON-RPC at protocol version 2025-06-18, all rate-limited at 30 requests/minute
+  per IP: Wagie (https://wagerx.io/mcp, 12 tools — casino audit evidence, regulatory intelligence, agentic
+  directory lookup), WagerX Tech Concierge (https://wagerx.io/tech/mcp, 9 tools — time, holidays, ECB rates,
+  weather, public wallet and crypto reference lookups), and two topic-scoped agents at
+  https://wagerx.io/agents/canada/mcp and https://wagerx.io/agents/anonymous/mcp. No stdio package, npm/PyPI
+  package or npx/uvx install is published; the servers are reachable only as hosted endpoints.
+deployment:
+  mode: remote
+  endpoint: https://wagerx.io/mcp
+  auth: none
+  verified: probed
+  note: >-
+    A GET on /mcp answers 405 with {"error":"SSE not supported. POST JSON-RPC 2.0 messages to this
+    endpoint.","protocolVersion":"2025-06-18","stateless":true,"transport":"streamable-http"} — the endpoint
+    exists and states its own transport. POST tools/list, initialize and prompts/list on /mcp all answered
+    HTTP 503 with JSON-RPC error -32001 "MCP is temporarily disabled by the automatic usage safety circuit
+    (shared usage safety control is unavailable). It will recover automatically." on two attempts ~20
+    minutes apart, so the live Wagie tool schemas were NOT introspected at probe time; the tool list below
+    is taken from the provider's own canonical contract at /.well-known/wagie-manifest.json (which carries
+    full inputSchemas) and cross-checked against the agent card's mcp.tools[] and the provider's own
+    wagie-conformance.json (mcp_tools_list pass, tool_count 12). The sibling Tech server at /tech/mcp
+    answered 200 to both initialize and tools/list, which is the live proof that the shared MCP stack works
+    and that the 503 is a usage circuit, not a missing surface.
+servers:
+- id: wagie
+  name: WagerX iGaming & Regulatory Intelligence MCP
+  endpoint: https://wagerx.io/mcp
+  transport: streamable-http
+  stateless: true
+  protocol_version: '2025-06-18'
+  auth: none
+  rate_limit: 30 requests/minute per IP
+  status: live-but-circuit-open-at-probe
+  probe:
+    method: POST tools/list
+    http_status: 503
+    jsonrpc_error: -32001 MCP is temporarily disabled by the automatic usage safety circuit
+    fetched: '2026-09-19'
+    get_probe: 405 with transport self-description
+  tool_source: https://wagerx.io/.well-known/wagie-manifest.json (interfaces.mcp.tools, contract_version 2026-09-01)
+  prompts: prompts/list and prompts/get are documented (casino_safety_check, best_anonymous_casinos, best_casinos_in_canada named in llms.txt); not introspected (503).
+  response_contract: tools/call structuredContent matches SignedEvidenceEnvelope {data, proof} with an Ed25519 proof verifiable against https://wagerx.io/.well-known/wagerx-signing.json
+  tools:
+  - name: get_agentic_stats
+    read_only: true
+    input_schema:
+      scope: string enum [overview, catalog, endpoints, activity] (default overview)
+      period: string enum [24h, 7d, 30d, 90d, all] (default 30d)
+    description: Aggregate-only statistics about the WagerX Agentic Index, endpoint observations, or machine requests received by WagerX.
+  - name: find_agentic_services
+    read_only: true
+    input_schema:
+      query: string 1-500 chars (required)
+    description: Look up official and community MCP/A2A products in the WagerX Agentic Gambling Index; returns hosted endpoints, provenance, evidence status. Never executes remote tools.
+  - name: check_casino
+    read_only: true
+    input_schema:
+      name: string (required) — casino name or alias, fuzzy-matched
+    description: Forensic audit verdict for one crypto casino — trust score, audit status, latest real-money live test, KYC, license, review link.
+  - name: compare_casinos
+    read_only: true
+    input_schema:
+      names: array of string, 2-5 items (required)
+    description: Side-by-side comparison of 2-5 casinos on audit data.
+  - name: latest_audits
+    read_only: true
+    input_schema:
+      limit: integer 1-25 (default 10)
+    description: Most recent real-money casino audits, newest first.
+  - name: list_casinos
+    read_only: true
+    input_schema: {}
+    description: Every casino WagerX holds audit data on, with trust score and status.
+  - name: top_casinos
+    read_only: true
+    input_schema:
+      limit: integer 1-25 (default 10)
+    description: Casinos ranked by audit trust score; only completed real-money tests are ranked.
+  - name: new_casinos
+    read_only: true
+    input_schema: {}
+    description: Newest casinos on the radar including mid-audit ones (unscored).
+  - name: long_running_casinos
+    read_only: true
+    input_schema: {}
+    description: Casino brands by documented launch year, oldest first, with current audit evidence.
+  - name: best_bonuses
+    read_only: true
+    input_schema:
+      casino: string (optional)
+      limit: integer 1-25 (default 10)
+    description: Current bonuses with decoded T&C terms and a real-value score.
+  - name: regulatory_intelligence
+    read_only: true
+    input_schema:
+      jurisdiction: string (optional)
+      limit: integer 1-25 (default 8)
+    description: Gambling regulatory context for a jurisdiction plus source-linked enforcement records from an approved regulator registry.
+  - name: country_recommendations
+    read_only: true
+    input_schema:
+      country: string 1-100 chars (required) — name, ISO alpha-2 or alias
+    description: At most one top choice and two alternatives for a country from completed reviews whose restriction list excludes it.
+- id: tech-concierge
+  name: wagerx-tech-concierge
+  endpoint: https://wagerx.io/tech/mcp
+  transport: streamable-http
+  protocol_version: '2025-06-18'
+  server_version: 1.0.0
+  auth: none
+  status: live
+  probe:
+    method: POST initialize + POST tools/list
+    http_status: 200
+    fetched: '2026-09-19'
+    instructions: Mainstream information only. Inspect provenance, freshness, coverage and limitations in every tool result.
+    capabilities: tools (listChanged false)
+  tools_file: mcp/wagerx-io-tech-mcp-tools.json
+  tool_count: 9
+  tools: [get_local_time, get_public_holidays, get_exchange_rate, get_weather_forecast, get_us_weather_alerts, check_wallet_balance, explain_wallet_result, get_crypto_prices, convert_crypto_amount]
+  agent_card: a2a/wagerx-io-tech-agent-card.json
+  note: Verbatim tools/list response saved; get_weather_forecast reported "Configuration required" on the provider's own /tech/status page at probe time.
+- id: canada
+  name: Best Casinos in Canada — by WagerX
+  endpoint: https://wagerx.io/agents/canada/mcp
+  transport: streamable-http
+  protocol_version: '2025-06-18'
+  auth: none
+  status: live-but-circuit-open-at-probe
+  probe:
+    method: POST tools/list
+    http_status: 503
+    jsonrpc_error: -32001 shared Canada service usage control is unavailable
+    fetched: '2026-09-19'
+  manifest: https://wagerx.io/agents/canada
+  agent_card: a2a/wagerx-io-canada-agent-card.json
+  tools: [canada_casino_recommendations, canada_casino_availability, canada_review_evidence]
+  tool_source: names from wagerx.io/llms.txt; schemas not introspected.
+- id: anonymous
+  name: Best Anonymous Casinos — by WagerX
+  endpoint: https://wagerx.io/agents/anonymous/mcp
+  transport: streamable-http
+  protocol_version: '2025-06-18'
+  auth: none
+  status: live-but-circuit-open-at-probe
+  probe:
+    method: POST tools/list
+    http_status: 503
+    jsonrpc_error: -32001 shared anonymous service usage control is unavailable
+    fetched: '2026-09-19'
+  manifest: https://wagerx.io/agents/anonymous
+  agent_card: a2a/wagerx-io-anonymous-agent-card.json
+  tools: [best_anonymous_casinos, anonymous_casino_evidence]
+  tool_source: names from wagerx.io/llms.txt; schemas not introspected.
+well_known:
+  oauth_authorization_server: 404 (anonymous surface, no auth server)
+  oauth_protected_resource: 404
+  signing_key: https://wagerx.io/.well-known/wagerx-signing.json

@@ -1,0 +1,76 @@
+generated: '2026-09-19'
+method: searched
+source: https://wagerx.io/agent-gateway + openapi/wagerx-io-openapi.yml + live responses observed 2026-09-19
+docs: https://wagerx.io/agent-gateway
+surface_shape: >-
+  Three transports over one read-only dataset: plain REST GET feeds on https://wagerx.io/api/*, an A2A
+  JSON-RPC endpoint (/a2a) and MCP streamable-HTTP endpoints (/mcp, /tech/mcp, /agents/*/mcp). There is NO
+  write surface anywhere — no POST creates, updates or deletes anything; the only POSTs are JSON-RPC
+  queries. That single fact settles idempotency, reversibility and dry-run below.
+auth:
+  style: none
+  ref: authentication/wagerx-io-authentication.yml
+idempotency:
+  coverage: na
+  scope: []
+  mechanism: none
+  note: >-
+    Read-only API. Every REST operation is GET; the JSON-RPC POSTs (message/send, tools/call) are pure
+    queries with no server-side state (the MCP server self-describes as stateless). There is no mutating
+    surface for an Idempotency-Key to protect, so the dimension does not apply rather than scoring zero.
+reversibility:
+  status: na
+  write_surfaces: []
+  note: Nothing to reverse — no operation creates, changes or deletes a resource. Documented here so the denominator excludes it.
+dry_run_mode:
+  status: na
+  note: No writes to rehearse. MCP prompts/list + prompts/get expose ready-made questions, which is the closest thing to a rehearsal surface.
+pagination:
+  style: none-on-rest / bounded-limit-on-mcp
+  rest: getAllCasinoAudits returns the full set (56 records, total_casinos field) — no page, cursor, offset or limit parameter.
+  mcp: latest_audits, top_casinos, best_bonuses, regulatory_intelligence take integer limit 1-25 (defaults 10/10/10/8); no cursor.
+  response_fields: [total_casinos, casinos, timestamp, editorial_updated_iso, version, provider, documentation]
+field_expansion:
+  supported: false
+sparse_fields:
+  supported: false
+filtering:
+  rest: none in the spec (llms.txt documents ?team=, ?date=, ?status= on the undocumented /api/iihf/matches feed and ?period= on /api/agentic-web-observatory)
+  mcp: tool arguments (name, names[], jurisdiction, country, casino, scope, period)
+request_id_tracing:
+  header: none
+  note: No request-id header documented or observed. JSON-RPC id is echoed; A2A responses carry contextId + messageId; signed envelopes carry answer_id.
+versioning:
+  style: date-versioned contract in payload (schema_version) + dated info.version; no URL/header versioning
+  ref: lifecycle/wagerx-io-lifecycle.yml
+error_envelope:
+  rest: '{"error": "<string>"}'
+  jsonrpc: JSON-RPC 2.0 error object (observed code -32001)
+  soft_errors: getTrumpCryptoIndex returns 200 with disabled:true when paused — read the flag
+  ref: errors/wagerx-io-problem-types.yml
+rate_limit_signaling:
+  documented_limit: 30 requests/minute per IP
+  headers: none documented; none observed (no RateLimit-*, X-RateLimit-* or Retry-After on 200 or 503 responses)
+  exhaustion_status: undocumented
+  ref: rate-limits/wagerx-io-rate-limits.yml
+response_integrity:
+  convention: Every A2A/MCP answer is a SignedEvidenceEnvelope {data, proof}; proof is an Ed25519 signature over data canonicalised as JSON with sorted keys, compact separators and ASCII escaping; key at https://wagerx.io/.well-known/wagerx-signing.json (kid wagerx-ed25519-2026-v1); proof.signed_at is an ISO timestamp.
+  evidence_first_shape: data carries schema_version, answer, answer_id, evidence_state (available|stale|missing|unavailable|unaudited|insufficient_evidence), claims[] (claim_id, evidence_ids, state, limitations), evidence[] (evidence_id, source_url, authority, published_at, observed_at, retrieved_at, freshness current|aging|stale|unknown), limitations[], ai_transparency.
+  note: The provider's stated boundary — a valid signature proves origin and integrity, not truth, safety, legality or uptime.
+caching:
+  rest: Cache-Control no-cache, max-age=0 on /api/audit/*; llms.txt states 15-min cache on /regulatory/data.json and 60 s on /api/iihf/*
+  a2a_mcp: Cache-Control public, max-age=300 observed on /a2a and /mcp responses (including the 503 error)
+cors:
+  access_control_allow_origin: "'*' observed on /mcp; llms.txt states CORS-open on the JSON feeds"
+content_types:
+  request: application/json (JSON-RPC); GET feeds take no body
+  response: application/json; MCP does not offer text/event-stream (GET /mcp 405 "SSE not supported")
+transport_security:
+  hsts: max-age=63072000; includeSubDomains (two HSTS headers are sent, 63072000 and 31536000)
+  headers_observed: [x-content-type-options nosniff, x-frame-options SAMEORIGIN, x-xss-protection, x-robots-tag noindex on JSON feeds]
+naming:
+  json_keys: snake_case (trust_score, audit_date, editorial_updated_iso, evidence_state)
+  operation_ids: lowerCamelCase (getCasinoAudit, sendWagieA2AMessage, callWagieMCP)
+  mcp_tools: snake_case (check_casino, regulatory_intelligence)
+timestamps:
+  mixed: ISO 8601 with offset on signed envelopes and discovery docs (observed_at, signed_at); human strings ("August 10, 2026") alongside *_iso fields in audit records; Unix epoch integers on /api/regulatory-intel (updated) and /api/audit/all (timestamp)

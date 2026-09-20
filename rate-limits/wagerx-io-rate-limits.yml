@@ -1,0 +1,29 @@
+generated: '2026-09-19'
+method: searched
+source: 'https://wagerx.io/openapi.json (x-rateLimit on every operation) + https://wagerx.io/agent-gateway ("No authentication. Rate limit: 30 requests/minute per IP.")'
+docs: https://wagerx.io/agent-gateway
+limit_count: 1
+limits:
+- scope: per-IP
+  applies_to: every documented operation — REST feeds, /a2a and /mcp (the spec repeats x-rateLimit "30 requests per minute per IP" on all 14 operations)
+  window: 1 minute
+  limit: 30
+  burst: null
+  note: A single shared limit; no per-endpoint or per-key variation (there are no keys).
+headers:
+  documented: []
+  observed: []
+  note: >-
+    No RateLimit-*, X-RateLimit-* or Retry-After headers are documented, and none were present on the 200
+    responses to /api/audit/all, /api/regulatory-intel, /a2a or on the 503 circuit-open response from /mcp
+    (observed 2026-09-19). Cache-Control public, max-age=300 is the only throttling-adjacent header on the
+    agent endpoints.
+exhaustion:
+  status_code: null
+  body: null
+  note: Undocumented and not observed — the probe stayed well under 30 rpm.
+usage_circuit:
+  note: >-
+    Separate from the rate limit, the MCP endpoints have an "automatic usage safety circuit" that answered
+    HTTP 503 / JSON-RPC -32001 to every MCP request during the probe window ("It will recover
+    automatically"). The Tech MCP was unaffected. Recorded in errors/wagerx-io-problem-types.yml.

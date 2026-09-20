@@ -1,0 +1,111 @@
+generated: '2026-09-19'
+method: derived
+source: openapi/wagerx-io-openapi.yml components.schemas $ref graph + response schemas + live /api/audit/{slug} and /a2a response shapes observed 2026-09-19
+render: none (no subway/ directory)
+summary: >-
+  Two disjoint graphs. (1) The casino-audit dataset: a CasinoAuditSummary list (getAllCasinoAudits) keyed
+  by slug that expands to one CasinoAudit (getCasinoAudit). (2) The evidence-envelope graph every agent
+  answer uses: SignedEvidenceEnvelope -> EvidenceFirstData -> Claim[] -> Evidence[] linked by evidence_ids,
+  with AITransparency embedded in every discovery and answer document. Identifiers are human slugs for
+  casinos and opaque string ids (evidence_id, claim_id, answer_id, agent_id) for evidence.
+entities:
+- name: CasinoAuditSummary
+  source: getAllCasinoAudits response casinos[] items
+  id: slug
+  fields: [name, slug, status, tag, trust_score, vibe]
+  count_at_probe: 56
+- name: CasinoAudit
+  source: getCasinoAudit response casino
+  id: slug (path parameter)
+  fields_observed: [andreas_take, audit_date, cons, deposit, editorial_updated, editorial_updated_iso, games, kyc, kyc_policy, license, live_test, name, payments, pros, restricted_countries, review_url, status, trust_score, withdrawal]
+  note: Field list is from the spec's inline response schema plus one live record; the spec does not name this object.
+- name: FeedEnvelope
+  source: getAllCasinoAudits / getCasinoAudit top level
+  fields: [documentation, editorial_updated, editorial_updated_iso, provider, timestamp, total_casinos, version]
+- name: SignedEvidenceEnvelope
+  source: components.schemas.SignedEvidenceEnvelope
+  fields: [data, proof]
+  proof_fields: [type (const Ed25519Signature), key_id, public_key_url, signed_field (const data), signature, signed_at]
+- name: EvidenceFirstData
+  source: components.schemas.EvidenceFirstData
+  id: answer_id
+  fields: [schema_version, answer_id, agent_id, ai_transparency, evidence_state, claims, evidence]
+  fields_observed_extra: [answer, catalog_url, limitations, records, status, unknown]
+- name: Claim
+  source: components.schemas.Claim
+  id: claim_id
+  fields: [claim_id, claim, evidence_ids, state, limitations]
+  enums: {state: [available, stale, missing, unavailable, unaudited, insufficient_evidence]}
+- name: Evidence
+  source: components.schemas.Evidence
+  id: evidence_id
+  fields: [evidence_id, source_name, source_url, authority, published_at, observed_at, retrieved_at, freshness, jurisdiction, evidence_type, limitations]
+  enums: {freshness: [current, aging, stale, unknown]}
+- name: AITransparency
+  source: components.schemas.AITransparency
+  fields: [schema_version, ai_interaction, provider, system, purposes, evidence_limitations, advice_boundary, human_contact, notice]
+- name: RegulatorySnapshot
+  source: components.schemas.RegulatorySnapshot
+  fields: [found, data_available, evidence_state, jurisdiction, authority, official_url, status, status_label, actions, observed_at, legal_advice]
+- name: AgentCard
+  source: components.schemas.AgentCard
+  note: The A2A card shape (see a2a/wagerx-io-a2a.yml).
+- name: WagieManifest
+  source: components.schemas.WagieManifest
+  fields: [$schema, contract_version, published_on, identity, ai_transparency, focus, sample_questions, interfaces, skills, response_contract, safety, claim_boundaries]
+- name: A2ADiscovery
+  source: components.schemas.A2ADiscovery
+  fields: [protocol, versions, transport, agent_id, agent_name, ai_transparency, contract_version, manifest, agent_card, agent_card_url, sample_questions, usage]
+- name: ConformanceObservation
+  source: components.schemas.ConformanceObservation
+  fields: [agent_id, agent_name, contract_version, observed_at, status, stages]
+  enums: {status: [operational, degraded, error], stage_status: [pass, degraded, fail]}
+relationships:
+- from: CasinoAuditSummary
+  to: CasinoAudit
+  type: has_one
+  via: slug -> /api/audit/{slug}
+- from: FeedEnvelope
+  to: CasinoAuditSummary
+  type: has_many
+  via: casinos[]
+- from: SignedEvidenceEnvelope
+  to: EvidenceFirstData
+  type: has_one
+  via: data ($ref)
+- from: EvidenceFirstData
+  to: Claim
+  type: has_many
+  via: claims[] ($ref)
+- from: EvidenceFirstData
+  to: Evidence
+  type: has_many
+  via: evidence[] ($ref)
+- from: Claim
+  to: Evidence
+  type: has_many
+  via: evidence_ids[] -> Evidence.evidence_id (id reference, not $ref)
+- from: EvidenceFirstData
+  to: AITransparency
+  type: has_one
+  via: ai_transparency ($ref)
+- from: A2ADiscovery
+  to: AITransparency
+  type: has_one
+  via: ai_transparency ($ref)
+- from: WagieManifest
+  to: AITransparency
+  type: has_one
+  via: ai_transparency ($ref)
+- from: A2A10SignedEvidenceResponse / A2A030SignedEvidenceResponse / MCPSignedEvidenceResponse
+  to: SignedEvidenceEnvelope
+  type: has_one
+  via: result.parts[].data / result.structuredContent ($ref)
+- from: SignedEvidenceEnvelope.proof
+  to: signing key
+  type: belongs_to
+  via: key_id + public_key_url -> https://wagerx.io/.well-known/wagerx-signing.json (kid wagerx-ed25519-2026-v1)
+id_conventions:
+  casino: lowercase hyphenated slug (duelbits, tg-casino, tower-bet)
+  agent: reverse-DNS agent_id (io.wagerx.wagie, io.wagerx.agents.canada-casino-evidence)
+  evidence_claim_answer: opaque strings; no documented prefix scheme

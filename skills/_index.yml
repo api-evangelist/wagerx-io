@@ -1,0 +1,13 @@
+generated: '2026-09-19'
+method: generated
+source: openapi/wagerx-io-openapi.yml operationIds + provider docs (https://wagerx.io/agent-gateway); no provider-published skills or AGENTS.md exist (searched wagerx.io, llms.txt, github.com/WagerX)
+skills:
+- file: skills/wagerx-io-casino-audit-lookup.md
+  name: wagerx-casino-audit-lookup
+  operations: [getAllCasinoAudits, getCasinoAudit]
+- file: skills/wagerx-io-ask-wagie-a2a.md
+  name: wagerx-ask-wagie-a2a
+  operations: [getWagieA2ADiscovery, sendWagieA2AMessage, getWagieAgentCard]
+- file: skills/wagerx-io-regulatory-intelligence.md
+  name: wagerx-regulatory-intelligence
+  operations: [getRegulatoryIntel, callWagieMCP]

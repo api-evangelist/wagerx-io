@@ -1,0 +1,79 @@
+generated: '2026-09-19'
+method: searched
+source: https://wagerx.io/.well-known/wagie-conformance.json + https://wagerx.io/.well-known/agent-card.json + openapi/wagerx-io-openapi.yml + https://wagerx.io/agent-gateway
+note: >-
+  Assertions are made only where a contract or a published document supports them. WagerX publishes its OWN
+  dated conformance self-check (wagie-conformance.json, saved under well-known/) — that document is the
+  provider's claim; the entries below are our reading of the artifacts.
+domain_standard:
+  sector: iGaming / gambling intelligence
+  finding: none-declared
+  note: >-
+    Reward-only check. The contract declares no gambling-sector interchange standard (no GLI, OGS/Open
+    Gaming Standard, GSA S2S/G2S, or eCOGRA schema is referenced in the spec, card or manifest) and the Kin
+    Score regime map carries no gambling regime with a standards[] shortlist. WagerX is a research/audit
+    publisher, not an operator, so there is no standard for its market to declare against. Not penalised.
+conformance:
+- id: a2a
+  conforms: true
+  version: '1.0.0'
+  evidence: https://wagerx.io/.well-known/agent-card.json — supportedInterfaces[] JSONRPC protocolVersion 1.0 (and 0.3.0); graded conformant in a2a/wagerx-io-a2a.yml; live message/send answered 200 with a JSON-RPC result.
+- id: mcp
+  conforms: true
+  version: '2025-06-18'
+  evidence: https://wagerx.io/tech/mcp initialize returned protocolVersion 2025-06-18 and serverInfo wagerx-tech-concierge 1.0.0 (HTTP 200); https://wagerx.io/mcp GET 405 body self-declares protocolVersion 2025-06-18, transport streamable-http, stateless true.
+- id: jsonrpc-2.0
+  conforms: true
+  evidence: Both /a2a and /mcp answer with jsonrpc "2.0" envelopes including on error (-32001 error object observed).
+- id: openapi
+  conforms: true
+  version: 3.1.0
+  evidence: https://wagerx.io/openapi.json parses as OpenAPI 3.1.0 with 13 paths / 14 operations and 20 component schemas.
+- id: llms-txt
+  conforms: true
+  evidence: https://wagerx.io/llms.txt (200, text/plain, 28.9 KB) in llmstxt.org shape — H1, blockquote summary, H2 sections of markdown links.
+- id: rfc9116-security-txt
+  conforms: true
+  evidence: https://wagerx.io/.well-known/security.txt — Contact, Expires (2027-07-01), Preferred-Languages, Canonical, Policy fields present.
+- id: rfc7517-jwks
+  conforms: true
+  evidence: https://wagerx.io/.well-known/jwks.json (ES256 P-256, kid wagerx-agent-card-es256-2026-v1) and https://wagerx.io/.well-known/wagerx-signing.json (Ed25519 OKP, kid wagerx-ed25519-2026-v1) are RFC 7517 JWK Sets.
+- id: signed-responses-ed25519
+  conforms: true
+  evidence: Every A2A/MCP answer is a SignedEvidenceEnvelope {data, proof} (openapi components.schemas.SignedEvidenceEnvelope); live A2A response carried proof.type Ed25519Signature, key_id wagerx-ed25519-2026-v1, canonicalisation "JSON with sorted keys, compact separators, ASCII-escaped, UTF-8". Provider-specific scheme, not a named standard (not JWS/COSE/Data Integrity).
+- id: jws-agent-card-signature
+  conforms: true
+  evidence: agent card signatures[] carries a detached JWS (protected header alg ES256, kid wagerx-agent-card-es256-2026-v1) per the A2A AgentCardSignature shape, verifiable against /.well-known/jwks.json.
+- id: eu-ai-act-article-50-notice
+  conforms: true
+  evidence: https://wagerx.io/wagerx-ai-policy ("Last reviewed 31 August 2026") publishes the direct-interaction notice; the same notice is machine-readable in agent card aiTransparency and manifest ai_transparency (schema_version 1.0, ai_interaction true). The provider itself says it is "not a legal certification".
+- id: cc-by-4.0-dataset
+  conforms: true
+  evidence: https://wagerx.io/regulatory/data.json declares license "CC BY 4.0", publisher, citation string and schema inline.
+- id: oauth2
+  conforms: false
+  evidence: No securitySchemes in the OpenAPI; agent card authentication.apiKeyRequired false; /.well-known/oauth-authorization-server 404. Anonymous by design.
+- id: oidc
+  conforms: false
+  evidence: /.well-known/openid-configuration 404 (a JWKS exists but no issuer metadata).
+- id: rfc9457
+  conforms: false
+  evidence: Errors are ad-hoc JSON ({"error":"..."} on REST, JSON-RPC error objects on /a2 and /mcp); no application/problem+json.
+- id: rfc9728-protected-resource-metadata
+  conforms: false
+  evidence: /.well-known/oauth-protected-resource 404 on wagerx.io (the MCP host). Not applicable to an anonymous server, recorded for completeness.
+- id: json-api
+  conforms: false
+  evidence: Plain JSON objects; no JSON:API envelope.
+- id: pagination
+  conforms: false
+  evidence: REST list operation getAllCasinoAudits returns the full set (56 casinos) with no page/cursor/limit parameter; only MCP tools take a bounded limit (1-25).
+- id: idempotency
+  conforms: false
+  evidence: Not applicable — the entire surface is read-only (GET data + stateless JSON-RPC queries); no Idempotency-Key semantics are needed or documented.
+- id: rfc8594-sunset
+  conforms: false
+  evidence: No Deprecation or Sunset headers documented; the "legacy" /.well-known/agent.json alias has no published sunset.
+- id: rfc9116-security-txt-policy-url
+  conforms: true
+  evidence: Policy points at https://wagerx.io/methodology (200) — a methodology page, not a dedicated vulnerability disclosure policy; see security/wagerx-io-vulnerability-disclosure.yml.

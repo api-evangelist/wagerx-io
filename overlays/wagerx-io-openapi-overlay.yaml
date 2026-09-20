@@ -1,0 +1,87 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the WagerX iGaming & Regulatory Intelligence API
+  version: 2026-09-19
+  x-generated: '2026-09-19'
+  x-method: generated
+  x-source: openapi/wagerx-io-openapi.yml (verbatim from https://wagerx.io/openapi.json, info.version 2026-08-31)
+  x-note: >-
+    Non-destructive overlay. The upstream spec declares no tags and no externalDocs, states its rate limit in
+    a vendor extension (x-rateLimit) rather than in 429 responses, and omits several live JSON feeds that
+    wagerx.io/llms.txt documents. This overlay adds tags, a tag registry, externalDocs to the Agent Gateway,
+    and a 429 response note derived from the provider's own stated limit. It adds NO paths — the
+    undocumented feeds are listed in mcp/wagerx-io-tool-crosswalk.yml instead.
+extends: ../openapi/wagerx-io-openapi.yml
+actions:
+- target: $
+  update:
+    externalDocs:
+      description: WagerX Agent Gateway — quickstart, tool reference and signature verification guide
+      url: https://wagerx.io/agent-gateway
+    tags:
+    - name: Casino Audits
+      description: Dated real-money audit evidence for crypto casinos.
+    - name: Indexes
+      description: Trump Crypto Index and Slot Hype Index feeds (trading vertical; may be paused).
+    - name: Regulatory
+      description: Gambling regulatory intelligence feed.
+    - name: News
+      description: Latest WagerX articles.
+    - name: Discovery
+      description: Well-known discovery documents — manifest, agent cards, health, conformance.
+    - name: A2A
+      description: Agent-to-agent JSON-RPC surface (A2A 1.0 SendMessage / 0.3.0 message/send).
+    - name: MCP
+      description: Model Context Protocol streamable-HTTP surface.
+- target: $.paths['/api/audit/all'].get
+  update:
+    tags: [Casino Audits]
+- target: $.paths['/api/audit/{slug}'].get
+  update:
+    tags: [Casino Audits]
+- target: $.paths['/api/trump-index'].get
+  update:
+    tags: [Indexes]
+- target: $.paths['/api/slot-index'].get
+  update:
+    tags: [Indexes]
+- target: $.paths['/api/regulatory-intel'].get
+  update:
+    tags: [Regulatory]
+- target: $.paths['/api/news/latest'].get
+  update:
+    tags: [News]
+- target: $.paths['/.well-known/wagie-manifest.json'].get
+  update:
+    tags: [Discovery]
+- target: $.paths['/.well-known/agent-card.json'].get
+  update:
+    tags: [Discovery]
+- target: $.paths['/.well-known/agent.json'].get
+  update:
+    tags: [Discovery]
+    deprecated: false
+    description: Compatibility alias for /.well-known/agent-card.json (the provider calls it "legacy" but has published no sunset date).
+- target: $.paths['/.well-known/wagie-health.json'].get
+  update:
+    tags: [Discovery]
+- target: $.paths['/.well-known/wagie-conformance.json'].get
+  update:
+    tags: [Discovery]
+- target: $.paths['/a2a'].get
+  update:
+    tags: [A2A]
+- target: $.paths['/a2a'].post
+  update:
+    tags: [A2A]
+- target: $.paths['/mcp'].post
+  update:
+    tags: [MCP]
+    responses:
+      '405':
+        description: Returned to GET requests — SSE is not supported; POST JSON-RPC 2.0 messages. Body self-describes protocolVersion 2025-06-18, stateless true, transport streamable-http (observed 2026-09-19).
+      '503':
+        description: JSON-RPC error -32001 when the automatic usage safety circuit is open (observed 2026-09-19 — "MCP is temporarily disabled by the automatic usage safety circuit").
+- target: $.paths.*.*[?(@.operationId)]
+  update:
+    x-rate-limit-note: 30 requests per minute per IP (provider x-rateLimit); no RateLimit-* or Retry-After headers are documented or were observed on 200 responses.

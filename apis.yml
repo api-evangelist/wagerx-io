@@ -1,18 +1,106 @@
 aid: wagerx-io
 name: WagerX
-description: 'WagerX is a company surfaced via the API Evangelist harvest backlog (source: a2a-registry)
-  and added to the network as a stub for full-pipeline profiling.'
+description: >-
+  WagerX is an independent crypto-casino audit lab and gambling regulatory intelligence publisher founded in
+  2018 by Andreas Ericsson. It runs real-money deposit and withdrawal tests on 40+ crypto casinos, tracks
+  enforcement actions from ~40 gambling regulators, and publishes the results as a free, anonymous,
+  read-only API surface: a REST feed set described by an OpenAPI 3.1 document, the "Wagie" agent exposed
+  over both A2A JSON-RPC and MCP streamable-HTTP with every answer wrapped in an Ed25519-signed evidence
+  envelope, a separate "Tech Concierge" MCP/A2A agent, and an Agentic Gambling Index cataloguing other
+  providers' MCP servers and A2A agents.
 url: https://raw.githubusercontent.com/api-evangelist/wagerx-io/refs/heads/main/apis.yml
+image: https://wagerx.io/static/images/wagerx-og-default.png
 x-type: company
 x-source: harvest:a2a-registry
-x-tier: stub
-x-tier-reason: harvest
+x-tier: profiled
+x-tier-reason: enriched 2026-09-19 from the provider's own OpenAPI, agent cards, MCP servers and docs
 specificationVersion: '0.20'
 created: '2026-09-19'
 modified: '2026-09-19'
 tags:
 - Company
-apis: []
+- Gambling
+- iGaming
+- Casinos
+- Regulatory Intelligence
+- Compliance
+- Cryptocurrency
+- Agents
+- MCP
+- A2A
+- Research
+apis:
+- name: WagerX iGaming & Regulatory Intelligence API
+  description: >-
+    Public read-only REST feeds for dated crypto-casino audit evidence (all audits, one audit by slug),
+    the regulatory intelligence alert feed, the Trump Crypto and Slot Hype indexes, latest news, and the
+    agent discovery documents. No authentication; 30 requests/minute per IP; served from the apex domain.
+  humanURL: https://wagerx.io/api
+  image: https://wagerx.io/static/images/wagerx-og-default.png
+  baseURL: https://wagerx.io
+  tags:
+  - Casino Audits
+  - Regulatory Intelligence
+  - Discovery
+  properties:
+  - type: OpenAPI
+    url: openapi/wagerx-io-openapi.yml
+  - type: OpenAPI
+    url: https://wagerx.io/openapi.json
+  - type: Documentation
+    url: https://wagerx.io/agent-gateway
+  - type: Overlay
+    url: overlays/wagerx-io-openapi-overlay.yaml
+  - type: ErrorCatalog
+    url: errors/wagerx-io-problem-types.yml
+  - type: DataModel
+    url: data-model/wagerx-io-data-model.yml
+  - type: RateLimits
+    url: rate-limits/wagerx-io-rate-limits.yml
+- name: Wagie MCP Server
+  description: >-
+    Remote, anonymous, stateless streamable-HTTP MCP server (protocol 2025-06-18) exposing 12 read-only
+    tools over casino audit evidence, regulatory intelligence and the Agentic Gambling Index; tools/call
+    results carry an Ed25519 SignedEvidenceEnvelope. Sibling servers run at /tech/mcp (9 tools, live),
+    /agents/canada/mcp and /agents/anonymous/mcp.
+  humanURL: https://wagerx.io/agent-gateway
+  image: https://wagerx.io/static/images/wagerx-og-default.png
+  baseURL: https://wagerx.io/mcp
+  tags:
+  - MCP
+  - Agents
+  properties:
+  - type: MCPServer
+    url: mcp/wagerx-io-mcp.yml
+  - type: MCPServer
+    url: https://wagerx.io/mcp
+  - type: MCPServer
+    url: https://wagerx.io/tech/mcp
+  - type: ToolCrosswalk
+    url: mcp/wagerx-io-tool-crosswalk.yml
+  - type: Documentation
+    url: https://wagerx.io/agent-gateway
+- name: Wagie A2A Agent
+  description: >-
+    A2A JSON-RPC endpoint accepting A2A 1.0 SendMessage and 0.3.0 message/send for bounded iGaming and
+    regulatory questions; discovered through a signed Agent Card at /.well-known/agent-card.json (graded
+    conformant to A2A 1.0.0), with sibling cards for the Tech Concierge and the Canada and Anonymous
+    casino agents.
+  humanURL: https://wagerx.io/agent-gateway
+  image: https://wagerx.io/static/images/wagerx-og-default.png
+  baseURL: https://wagerx.io/a2a
+  tags:
+  - A2A
+  - Agents
+  properties:
+  - type: AgentCard
+    url: a2a/wagerx-io-a2a.yml
+  - type: AgentCard
+    url: https://wagerx.io/.well-known/agent-card.json
+  - type: AgentCard
+    url: https://wagerx.io/.well-known/tech-agent.json
+  - type: Documentation
+    url: https://wagerx.io/agent-gateway
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -21,3 +109,80 @@ maintainers:
 common:
 - type: Website
   url: https://wagerx.io/
+- type: DeveloperPortal
+  url: https://wagerx.io/api
+- type: Documentation
+  url: https://wagerx.io/agent-gateway
+- type: APIReference
+  url: https://wagerx.io/agent-gateway
+- type: Support
+  url: https://wagerx.io/contact-us
+- type: About
+  url: https://wagerx.io/about-us
+- type: Blog
+  url: https://wagerx.io/news
+- type: BlogRSS
+  url: https://wagerx.io/rss.xml
+- type: Press
+  url: https://wagerx.io/press
+- type: PrivacyPolicy
+  url: https://wagerx.io/privacy-policy
+- type: Methodology
+  url: https://wagerx.io/methodology
+- type: LLMsTxt
+  url: llms/wagerx-io-llms.txt
+- type: LLMsTxt
+  url: https://wagerx.io/llms.txt
+- type: WellKnown
+  url: well-known/wagerx-io-well-known.yml
+- type: SecurityTxt
+  url: well-known/wagerx-io-security.txt
+- type: SecurityTxt
+  url: https://wagerx.io/.well-known/security.txt
+- type: Security
+  url: security/wagerx-io-vulnerability-disclosure.yml
+- type: DomainSecurity
+  url: security/wagerx-io-domain-security.yml
+- type: VulnerabilityDisclosure
+  url: security/wagerx-io-vulnerability-disclosure.yml
+- type: AgentCard
+  url: a2a/wagerx-io-a2a.yml
+- type: MCPServer
+  url: mcp/wagerx-io-mcp.yml
+- type: ToolCrosswalk
+  url: mcp/wagerx-io-tool-crosswalk.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: Conformance
+  url: conformance/wagerx-io-conformance.yml
+- type: Authentication
+  url: authentication/wagerx-io-authentication.yml
+- type: Conventions
+  url: conventions/wagerx-io-conventions.yml
+- type: Lifecycle
+  url: lifecycle/wagerx-io-lifecycle.yml
+- type: StatusPage
+  url: https://wagerx.io/tech/status
+- type: Plans
+  url: plans/wagerx-io-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/wagerx-io-rate-limits.yml
+- type: Packages
+  url: packages/wagerx-io-packages.yml
+- type: AITransparency
+  url: https://wagerx.io/wagerx-ai-policy
+- type: NoticeAndAction
+  url: https://wagerx.io/report-content
+- type: RegulatoryPosture
+  url: regulatory/wagerx-io-regulatory-posture.yml
+- type: Overlay
+  url: overlays/wagerx-io-openapi-overlay.yaml
+- type: ErrorCatalog
+  url: errors/wagerx-io-problem-types.yml
+- type: DataModel
+  url: data-model/wagerx-io-data-model.yml
+x-enrichment:
+  date: '2026-09-19'
+  status: enriched
+  artifacts_added: 23
+  pass: local-v3

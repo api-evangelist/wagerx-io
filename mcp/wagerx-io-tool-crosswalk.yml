@@ -1,0 +1,119 @@
+generated: '2026-09-19'
+method: derived
+source: openapi/wagerx-io-openapi.yml + well-known/wagerx-io-wagie-manifest.json (MCP tool inventory) + mcp/wagerx-io-tech-mcp-tools.json
+summary: >-
+  Binds each Wagie MCP tool to the public REST operation that exposes the same data. The REST surface is a
+  thin read-only projection (6 data operations); most MCP tools are semantic views over two of them
+  (getAllCasinoAudits, getCasinoAudit) and several have no REST twin at all. The live Wagie tools/list was
+  503 at probe time, so bindings are by name and by the inputSchemas the provider publishes in its own
+  manifest — confidence is set accordingly. The Tech Concierge tools have no REST surface in the spec.
+surfaces:
+  openapi: openapi/wagerx-io-openapi.yml (14 operations, 6 of them data reads; servers https://wagerx.io; no auth)
+  mcp: https://wagerx.io/mcp (12 tools; tools/list 503 circuit-open at probe; schemas from /.well-known/wagie-manifest.json)
+  mcp_tech: https://wagerx.io/tech/mcp (9 tools; tools/list 200, live)
+  graphql: none
+crosswalk:
+- tool: check_casino
+  category: casino-audit
+  rest: [getCasinoAudit]
+  binding: name -> slug (fuzzy alias match on the MCP side; REST requires the exact slug from getAllCasinoAudits)
+  confidence: high
+- tool: list_casinos
+  category: casino-discovery
+  rest: [getAllCasinoAudits]
+  binding: full list, trust score + status projection
+  confidence: high
+- tool: top_casinos
+  category: casino-discovery
+  rest: [getAllCasinoAudits]
+  binding: getAllCasinoAudits is already sorted by trust score desc; tool adds limit (1-25) and the completed-live-test filter
+  confidence: medium
+- tool: latest_audits
+  category: casino-discovery
+  rest: [getAllCasinoAudits]
+  binding: same source re-sorted by audit date; REST offers no date sort or limit parameter
+  confidence: medium
+- tool: new_casinos
+  category: casino-discovery
+  rest: [getAllCasinoAudits]
+  binding: filter on status/tag (mid-audit entries); REST has no filter parameter
+  confidence: low
+- tool: long_running_casinos
+  category: casino-discovery
+  rest: [getAllCasinoAudits]
+  binding: needs a launch-year field not visible in the getAllCasinoAudits response schema; may draw on data the REST list omits
+  confidence: low
+- tool: compare_casinos
+  category: casino-comparison
+  rest: [getCasinoAudit]
+  binding: composite — N calls to getCasinoAudit (2-5 slugs) merged client-side
+  confidence: medium
+- tool: regulatory_intelligence
+  category: regulatory
+  rest: [getRegulatoryIntel]
+  binding: >-
+    getRegulatoryIntel returns the global alert feed only (no jurisdiction parameter); the tool adds
+    jurisdiction resolution against the approved-regulator registry and per-record source evidence.
+    The per-country JSON at /api/regulatory/{slug} and /regulatory/data.json that llms.txt documents are
+    closer matches but are NOT in the OpenAPI.
+  confidence: medium
+mcp_only:
+- tool: best_bonuses
+  reason: No bonus operation in the OpenAPI; the /bonuses pages and /tools/bonus-decoder are HTML only.
+- tool: country_recommendations
+  reason: Uses per-casino restricted_countries from getCasinoAudit plus review eligibility gates; no REST operation performs the screen.
+- tool: get_agentic_stats
+  reason: Agentic Index statistics; /api/agentic-web-observatory?period=30d (200, JSON) exists but is undocumented in the spec.
+- tool: find_agentic_services
+  reason: Agentic Gambling Index lookup; /agentic-gambling-index/catalog.json (200, 108 KB JSON) exists but is undocumented in the spec.
+- tool: get_local_time
+  reason: Tech Concierge; no REST twin.
+- tool: get_public_holidays
+  reason: Tech Concierge; no REST twin.
+- tool: get_exchange_rate
+  reason: Tech Concierge; no REST twin.
+- tool: get_weather_forecast
+  reason: Tech Concierge; no REST twin.
+- tool: get_us_weather_alerts
+  reason: Tech Concierge; no REST twin.
+- tool: check_wallet_balance
+  reason: Tech Concierge; no REST twin.
+- tool: explain_wallet_result
+  reason: Tech Concierge; no REST twin.
+- tool: get_crypto_prices
+  reason: Tech Concierge; no REST twin (the /api/cmc-data feed is undocumented in the spec).
+- tool: convert_crypto_amount
+  reason: Tech Concierge; no REST twin.
+rest_only:
+- operation: getTrumpCryptoIndex
+  reason: Trading-vertical index; the Wagie contract is deliberately iGaming/regulatory only. Endpoint answered {"disabled":true,"summary":"Index temporarily paused."} at probe.
+- operation: getSlotHypeIndex
+  reason: No MCP tool; endpoint answered 503 {"error":"unavailable"} at probe.
+- operation: getLatestNews
+  reason: No MCP tool; answered {"articles":[]} at probe.
+- operation: getWagieManifest
+  reason: Discovery document, not a tool.
+- operation: getWagieAgentCard
+  reason: Discovery document.
+- operation: getLegacyWagieAgentCard
+  reason: Discovery document (alias).
+- operation: getWagieHealth
+  reason: Discovery/health document.
+- operation: getWagieConformance
+  reason: Discovery document.
+- operation: getWagieA2ADiscovery
+  reason: A2A discovery, not a tool.
+- operation: sendWagieA2AMessage
+  reason: The A2A transport itself — every MCP tool is reachable through it as a natural-language question.
+- operation: callWagieMCP
+  reason: The MCP transport itself.
+undocumented_rest_feeds:
+  note: Live JSON endpoints that wagerx.io/llms.txt documents but the OpenAPI omits (all 200 at probe, no auth); recorded here so the gap is visible, NOT added to the spec.
+  endpoints: [/api/casinos, /api/live-tests, /api/kyc-status, /api/cmc-data, /api/forensic/casinos.json, '/api/forensic/{slug}.json', '/api/regulatory/{country}', /api/regulatory/recent.json, /regulatory/data.json, /api/iihf/tournament, /api/iihf/matches, /agentic-gambling-index/catalog.json, /api/agentic-web-observatory]
+coverage:
+  mcp_tools_total: 21
+  mcp_tools_bound: 8
+  mcp_only: 13
+  rest_operations_total: 14
+  rest_operations_bound: 3
+  rest_only: 11

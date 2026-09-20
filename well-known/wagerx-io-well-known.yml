@@ -1,0 +1,95 @@
+generated: '2026-09-19'
+method: probed
+source: live GET of /.well-known/* on every host the record knows
+note: >-
+  Hosts probed: wagerx.io (registrable domain, sole OpenAPI servers[] host, MCP host and A2A host — WagerX
+  serves everything from the apex) and www.wagerx.io (302s to the apex for the root but answers the
+  well-known paths directly). api./docs./mcp./developers.wagerx.io do not resolve in DNS. No OAuth /
+  OIDC discovery documents exist — the agent surfaces are anonymous by design (agent card
+  authentication.apiKeyRequired false), so /.well-known/oauth-authorization-server and
+  /.well-known/oauth-protected-resource 404 on the MCP host as well. Beyond the RFC-standard paths WagerX
+  publishes a cluster of first-party discovery documents (wagie-manifest, wagie-health,
+  wagie-conformance, wagerx-signing, jwks) that are recorded below and saved verbatim. Every 404 body is
+  the site's HTML "Page Not Found – WagerX" page (~76 KB), a real 404 status and not a soft-404.
+hosts:
+- host: wagerx.io
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    content_type: text/plain; charset=utf-8
+    file: well-known/wagerx-io-security.txt
+    note: Contact mailto:wagerxio@gmail.com, Expires 2027-07-01, Policy https://wagerx.io/methodology, Canonical set.
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/mcp.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 200
+    content_type: application/json
+    file: a2a/wagerx-io-agent-card.json
+    note: Canonical Wagie A2A Agent Card (signed, ES256 JWS).
+  - path: /.well-known/agent.json
+    status: 200
+    content_type: application/json
+    note: Legacy alias, same body as agent-card.json.
+  - path: /.well-known/tech-agent.json
+    status: 200
+    content_type: application/json
+    file: a2a/wagerx-io-tech-agent-card.json
+    note: WagerX Tech Concierge A2A Agent Card (alias /tech/.well-known/agent.json, also 200).
+  - path: /.well-known/google-agent-card.json
+    status: 200
+    content_type: application/json
+    note: Wagie card re-projected for Google's agent directory shape; not saved (duplicate content).
+  - path: /.well-known/openapi.json
+    status: 200
+    content_type: application/json
+    note: Same 54,564-byte OpenAPI 3.1.0 document as https://wagerx.io/openapi.json (saved under openapi/).
+  - path: /.well-known/jwks.json
+    status: 200
+    content_type: application/json
+    file: well-known/wagerx-io-jwks.json
+    note: ES256 P-256 JWK, kid wagerx-agent-card-es256-2026-v1, issuer https://wagerx.io — verifies the agent-card JWS signatures. Not an OIDC issuer (no openid-configuration).
+  - path: /.well-known/wagerx-signing.json
+    status: 200
+    content_type: application/json
+    file: well-known/wagerx-io-wagerx-signing.json
+    note: Ed25519 OKP JWK, kid wagerx-ed25519-2026-v1 — verifies the SignedEvidenceEnvelope on every A2A/MCP answer; carries its own canonicalisation instructions.
+  - path: /.well-known/wagie-manifest.json
+    status: 200
+    content_type: application/json
+    file: well-known/wagerx-io-wagie-manifest.json
+    note: Canonical Wagie contract, contract_version 2026-09-01 — identity, interfaces, full MCP tool inventory with inputSchemas, evidence schema, claim boundaries.
+  - path: /.well-known/wagie-health.json
+    status: 200
+    content_type: application/json
+    file: well-known/wagerx-io-wagie-health.json
+    note: Bounded server-side health self-check; status "degraded" at probe (regulatory_evidence_projection degraded, all other checks pass).
+  - path: /.well-known/wagie-conformance.json
+    status: 200
+    content_type: application/json
+    file: well-known/wagerx-io-wagie-conformance.json
+    note: Dated per-stage conformance observations (discovery, card consistency, A2A, MCP initialize, tools/list, signing, evidence projection).
+- host: www.wagerx.io
+  documents:
+  - path: /.well-known/agent-card.json
+    status: 200
+    content_type: application/json
+    note: Served directly on www (no redirect); same body as the apex card.
+  - path: /.well-known/agent.json
+    status: 200
+    content_type: application/json
+- host: api.wagerx.io
+  documents: []
+  note: Does not resolve (curl exit 6). WagerX has no separate API host.
+- host: mcp.wagerx.io
+  documents: []
+  note: Does not resolve. The MCP endpoint is https://wagerx.io/mcp on the apex, whose probes are recorded under wagerx.io above.

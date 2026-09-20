@@ -1,0 +1,27 @@
+generated: '2026-09-19'
+method: searched
+source: registry.npmjs.org search "wagerx", pypi.org/pypi/{wagerx,wagerx-io,wagie}/json, api.github.com/users/{wagerx,wagerx-io,wagerxio}, api.github.com/search/repositories?q=wagerx, wagerx.io/llms.txt, wagerx.io/agent-gateway
+package_count: 0
+official_count: 0
+packages: []
+note: >-
+  No first-party client library, SDK, CLI or MCP package is published. npm search returned nothing; PyPI
+  404s for wagerx, wagerx-io and wagie; the GitHub account github.com/WagerX holds one repository
+  (WagerX-Bot, JavaScript, no description or homepage, last push 2024-05-22) that nothing on wagerx.io links
+  to and that is not claimed as first-party — the other GitHub "wagerx" repositories are unrelated
+  student/portfolio projects. The provider's own docs describe access as hosted endpoints only (REST feeds,
+  remote MCP, A2A) with no install step. The browser extension "WagerX Casino Safety Check" (/extension) is
+  an end-user product, not a client library, and is not listed here.
+registries_checked:
+- registry: npm
+  query: wagerx
+  result: 0 packages
+- registry: pypi
+  query: wagerx, wagerx-io, wagie
+  result: 404 each
+- registry: github
+  query: users wagerx / wagerx-io / wagerxio; repo search wagerx
+  result: github.com/WagerX exists (1 repo, unlinked from the site); no org
+- registry: maven, nuget, go, rubygems, packagist, crates
+  query: not queried
+  result: no evidence of any JVM/.NET/Go/Ruby/PHP/Rust artefact anywhere in the docs to justify a lookup

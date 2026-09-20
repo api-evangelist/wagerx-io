@@ -1,0 +1,48 @@
+generated: '2026-09-19'
+method: searched
+source: https://wagerx.io/agent-gateway + https://wagerx.io/.well-known/wagie-manifest.json + https://wagerx.io/.well-known/wagie-health.json + https://wagerx.io/tech/status
+versioning:
+  scheme: date-versioned contracts
+  current:
+    openapi_info_version: '2026-08-31'
+    wagie_contract_version: '2026-09-01'
+    agent_card_version: '2026-09-01'
+    canada_anonymous_agents_version: '2026-09-15'
+    tech_concierge_version: 1.0.0
+  in_path: false
+  in_header: false
+  note: >-
+    No URL or header versioning. The Agent Gateway states "The canonical contract version is 2026-09-01.
+    Existing answer fields remain for compatibility. New clients should also read schema_version,
+    evidence_state, claims and evidence" — i.e. additive evolution with an in-payload schema_version.
+    The A2A endpoint accepts both the 1.0 and 0.3.0 dialects concurrently.
+deprecation_policy:
+  published: false
+  sunset_header: false
+  deprecation_header: false
+  deprecated_operations: []
+  note: >-
+    No deprecation policy page or RFC 8594 headers. The only deprecation-flavoured statement is that
+    /.well-known/agent.json is a "legacy" alias of /.well-known/agent-card.json kept "for compatibility"
+    with no sunset date. The OpenAPI marks nothing deprecated. llms.txt notes that pre-match Hockey Worlds
+    preview pages were retired with HTTP 410 after the tournament — content, not API, lifecycle.
+status_page:
+  url: https://wagerx.io/tech/status
+  http_status: 200
+  scope: WagerX Tech Concierge services only (world time, holidays, ECB rates, weather, US alerts) — a plain per-service availability page; weather showed "Configuration required" at probe.
+  machine_readable_health:
+    url: https://wagerx.io/.well-known/wagie-health.json
+    http_status: 200
+    status_at_probe: degraded
+    checks_at_probe: {a2a_readiness: pass, agent_card_consistency: pass, discovery_manifest: pass, igaming_evidence_projection: pass, mcp_initialize: pass, mcp_tools_list: pass, regulatory_evidence_projection: degraded, signing_readiness: pass}
+    note: The provider explicitly frames this as "a current bounded self-check, not an uptime guarantee".
+  incident_history: none published
+sla:
+  published: false
+  note: No SLA or uptime commitment; the manifest's claim_boundaries say a signature "proves origin and integrity, not ... continuous uptime".
+support_lifetime:
+  stated_period: null
+  note: Not stated anywhere reachable.
+changelog:
+  published: false
+  note: '/changelog 404; no dated release notes. Currency signals are the date-shaped versions above plus llms.txt "Last updated: 2026-09-20" and per-record editorial_updated_iso fields in API responses.'

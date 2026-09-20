@@ -1,0 +1,66 @@
+generated: '2026-09-19'
+method: derived
+source: openapi/wagerx-io-openapi.yml responses + live responses observed 2026-09-19 on https://wagerx.io
+format: custom-json
+note: >-
+  The OpenAPI declares exactly one error response (404 on getCasinoAudit). The other shapes below were
+  OBSERVED on live unauthenticated requests and are recorded as observations, not as documented contract.
+  REST errors are a bare {"error": "<message>"} object; the JSON-RPC surfaces (/a2a, /mcp) use standard
+  JSON-RPC 2.0 error objects. No application/problem+json anywhere.
+envelope:
+  rest: '{"error": "<string>"}'
+  jsonrpc: '{"jsonrpc":"2.0","id":<id>,"error":{"code":<int>,"message":"<string>"}}'
+problem_types:
+- id: casino-not-found
+  status: 404
+  operations: [getCasinoAudit]
+  title: Casino not found
+  source: openapi (documented)
+  remediation: Use a slug from getAllCasinoAudits (casinos[].slug); MCP check_casino fuzzy-matches aliases where REST does not.
+- id: feed-unavailable
+  status: 503
+  operations: [getSlotHypeIndex]
+  title: Feed unavailable
+  body_observed: '{"error":"unavailable"}'
+  source: observed 2026-09-19
+  remediation: Retry later; the provider's health and conformance documents distinguish "unavailable" from an empty result — do not treat as zero items.
+- id: index-paused
+  status: 200
+  operations: [getTrumpCryptoIndex]
+  title: Index temporarily paused (soft error inside a 200)
+  body_observed: '{"disabled":true,"headlines":[],"last_updated":"paused","score":50,"sentiment":"Neutral","summary":"Index temporarily paused."}'
+  source: observed 2026-09-19
+  remediation: Check disabled:true before using score; a 200 does not mean the index is live.
+- id: mcp-method-not-allowed
+  status: 405
+  operations: [callWagieMCP]
+  title: SSE not supported — POST JSON-RPC 2.0
+  body_observed: '{"error":"SSE not supported. POST JSON-RPC 2.0 messages to this endpoint.","protocolVersion":"2025-06-18","stateless":true,"transport":"streamable-http"}'
+  source: observed 2026-09-19 (GET /mcp)
+  remediation: Use POST with Content-Type application/json; the server is stateless streamable-HTTP with no SSE stream.
+- id: mcp-usage-circuit-open
+  status: 503
+  jsonrpc_code: -32001
+  operations: [callWagieMCP]
+  title: MCP temporarily disabled by the automatic usage safety circuit
+  body_observed: '{"error":{"code":-32001,"message":"MCP is temporarily disabled by the automatic usage safety circuit (shared usage safety control is unavailable). It will recover automatically."},"id":1,"jsonrpc":"2.0"}'
+  source: observed 2026-09-19 on /mcp, /agents/canada/mcp and /agents/anonymous/mcp
+  remediation: Back off and retry; the provider states recovery is automatic. No Retry-After header was sent (Cache-Control public, max-age=300 was).
+- id: not-found-html
+  status: 404
+  operations: []
+  title: Page Not Found – WagerX (HTML)
+  source: observed 2026-09-19 on unknown paths (e.g. /openapi.yaml, /docs)
+  remediation: Non-API paths return the site's HTML 404 page, not JSON; check Content-Type before parsing.
+- id: internal-server-error
+  status: 500
+  operations: []
+  title: Internal Server Error (Werkzeug HTML)
+  source: observed 2026-09-19 on /tech/agents and /forum
+  remediation: Transient; the Tech agent card's declared url /tech/a2a redirects here, so Tech A2A clients should expect this until fixed.
+- id: rate-limited
+  status: 429
+  operations: [all]
+  title: Rate limit exceeded (30 requests/minute per IP)
+  source: 'openapi x-rateLimit + https://wagerx.io/agent-gateway ("Rate limit: 30 requests/minute per IP"); status code and body NOT documented and NOT observed (we did not exceed the limit).'
+  remediation: Stay under 30 rpm per source IP; no documented headers to read.

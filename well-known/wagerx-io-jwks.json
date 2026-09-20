@@ -1,0 +1,1 @@
+{"issuer":"https://wagerx.io","keys":[{"alg":"ES256","crv":"P-256","kid":"wagerx-agent-card-es256-2026-v1","kty":"EC","use":"sig","x":"yDeX93SXzYKA25bkcAw5JDQI3wKw7PyYoet2-xAnB4Q","y":"b6vWAa29EA2qQpTAZhnm6a6wo1NQBNwt39qqnIStAvQ"}]}

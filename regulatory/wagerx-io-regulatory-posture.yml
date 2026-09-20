@@ -1,0 +1,83 @@
+generated: '2026-09-19'
+method: searched
+source: https://wagerx.io/wagerx-ai-policy + https://wagerx.io/report-content + https://wagerx.io/privacy-policy + https://wagerx.io/.well-known/agent-card.json + well-known/wagerx-io-security.txt
+note: >-
+  Harvest only — whether any regime applies is decided by the Kin Score regime map, not here. Every signal
+  below points at a page that carries the substance, not the word. Probed and absent: /accessibility (404
+  not probed separately — the sitemap lists no accessibility or VPAT page), /legal/subprocessors,
+  /legal/dpa, /security/sbom, /transparency, /docs/data-residency (no such paths exist; /legal 404).
+signals:
+  ai_transparency:
+    present: true
+    url: https://wagerx.io/wagerx-ai-policy
+    http_status: 200
+    last_reviewed: '2026-08-31'
+    substance: >-
+      "AI transparency & platform governance" page publishing the direct-interaction notice ("You are
+      interacting with Wagie, an AI system provided by WagerX..."), a role-specific AI inventory (chat,
+      A2A/MCP/APIs, editorial support, sentiment monitoring, rankings), four content-provenance labels
+      (editorial provenance not recorded / human-authored / AI-assisted human-reviewed / AI-generated), an
+      AI-literacy and human-oversight section that names EU AI Act Article 4 and Article 50, and data-retention
+      caveats. The provider states it is "not a legal certification".
+    machine_readable:
+    - https://wagerx.io/.well-known/agent-card.json (aiTransparency object, schema_version 1.0)
+    - https://wagerx.io/.well-known/wagie-manifest.json (ai_transparency object with notice, purposes, human_contact.policy_url/report_url)
+    - every A2A/MCP signed answer carries data.ai_transparency
+  notice_and_action:
+    present: true
+    url: https://wagerx.io/report-content
+    http_status: 200
+    substance: >-
+      "Report hosted content" — an electronic notice form for forum threads/posts and Agentic Gambling
+      Catalog records/submissions with content type, identifier/URL, reason categories (potentially illegal
+      content, scam/fraud/impersonation, harassment, privacy, materially misleading, IP, other), factual
+      details and optional contact; states human review, retention of case material, and an appeal route
+      (reply to the decision email or info@wagerx.io with the case reference). The page says the workflow
+      "is a readiness control and does not assert that WagerX has any particular Digital Services Act
+      classification".
+  data_subject_request:
+    present: false
+    note: >-
+      The privacy policy (https://wagerx.io/privacy-policy, "Last updated May 2026") lists "Your Rights" —
+      use the site without personal data, uninstall the extension, request deletion of forum posts by
+      contacting us, withdraw analytics consent — and routes privacy questions to the Contact page. That is a
+      contact route, not a DSR portal or a stated access/portability process, so it is not recorded as the
+      signal.
+  global_privacy_control:
+    honored: null
+    note: >-
+      No published GPC statement. The privacy policy describes region-based consent (banner for EU/EEA/UK/CH,
+      GA loads elsewhere with IP anonymisation) and says "we will not work around" browser-level tracking
+      protections — a related but different commitment. Not tested by sending Sec-GPC, per rule.
+  age_assurance:
+    present: false
+    note: >-
+      "18+ only" notices on https://wagerx.io/responsible-gambling and "not directed to anyone under 18" in the
+      privacy policy are statements, not an assurance mechanism; no age gate or verification is described.
+  subprocessors:
+    present: false
+    note: The privacy policy names OpenAI (chat processing) and Google Analytics in prose; no dated subprocessor table or DPA.
+  incident_notification:
+    present: false
+  transparency_report:
+    present: false
+    note: >-
+      https://wagerx.io/agentic-web-observatory publishes aggregate observations of WagerX's OWN MCP/A2A
+      traffic ("aggregate counters only, stores_ip false, stores_query_text false" per the agent manifests)
+      — telemetry disclosure about its agent surfaces, not a legal-requests transparency report.
+  data_residency:
+    present: false
+  sbom:
+    present: false
+  support_lifetime:
+    present: false
+    stated_period: null
+  accessibility_conformance:
+    present: false
+  training_data_summary:
+    present: false
+    note: The AI policy states chat is processed by OpenAI's API (privacy policy) and describes editorial provenance labels; no training-data summary is published.
+  exit_assistance:
+    present: false
+security_contact:
+  security_txt: well-known/wagerx-io-security.txt (Contact mailto:wagerxio@gmail.com, Policy https://wagerx.io/methodology)

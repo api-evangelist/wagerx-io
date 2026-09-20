@@ -1,0 +1,33 @@
+generated: '2026-09-19'
+method: searched
+source: https://wagerx.io/agent-gateway
+currency: null
+plan_count: 1
+plans:
+- name: Public read-only access
+  price: 0
+  currency: null
+  billing_period: null
+  signup_required: false
+  api_key_required: false
+  included:
+    rest_feeds: all documented /api/* GET endpoints and the discovery documents
+    mcp: https://wagerx.io/mcp, /tech/mcp, /agents/canada/mcp, /agents/anonymous/mcp
+    a2a: https://wagerx.io/a2a and the per-agent A2A endpoints
+  limits:
+    rate_limit: 30 requests/minute per IP
+    usage_circuit: MCP may be temporarily disabled by an automatic usage safety circuit (observed 2026-09-19)
+  overage: none — hard rate limit, no paid tier
+  evidence: 'Agent Gateway banner "FREE · NO API KEY" and "No authentication. Rate limit: 30 requests/minute per IP."; agent card authentication.apiKeyRequired false; OpenAPI license "Public Access" (https://wagerx.io/wagerx-ai-policy).'
+data_license:
+  regulatory_dataset: CC BY 4.0 (declared inline in https://wagerx.io/regulatory/data.json)
+  casino_feeds: llms.txt — "CORS open, no auth, free to cite with attribution"
+paid_services:
+  note: >-
+    WagerX sells a MANAGED service, not API tiers — https://wagerx.io/agentic-gambling-services ("Managed
+    MCP & A2A Agents for Gambling Businesses": a hosted read-only agent in 3 days, or agent plus five
+    catalog submissions in 3-5 days, "contact for a quote"). No published price. Not an API plan and not
+    counted above.
+  url: https://wagerx.io/agentic-gambling-services
+  http_status: 200
+note: No /pricing page exists (404). There is exactly one access level and it is free.

@@ -1,0 +1,272 @@
+{
+  "name": "Wagie — WagerX iGaming & Regulatory Intelligence Agent",
+  "description": "WagerX's evidence-led agent for crypto-casino audits, iGaming decisions, gambling regulatory intelligence, official MCP/A2A directory lookup, and aggregate statistics from WagerX's selective Index and observed traffic. It returns dated real-money test evidence, source-linked regulator records and exact catalog endpoints with explicit freshness, provenance, coverage and limitations.",
+  "preferredTransport": "JSONRPC",
+  "supportedInterfaces": [
+    {
+      "url": "https://wagerx.io/a2a",
+      "protocolBinding": "JSONRPC",
+      "protocolVersion": "1.0"
+    },
+    {
+      "url": "https://wagerx.io/a2a",
+      "protocolBinding": "JSONRPC",
+      "protocolVersion": "0.3.0"
+    }
+  ],
+  "version": "2026-09-01",
+  "agentCardUrl": "https://wagerx.io/.well-known/agent-card.json",
+  "sampleQuestions": [
+    "Is Duelbits safe?",
+    "Compare Duelbits and Bitsler.",
+    "How fast did Bitsler pay out?",
+    "What is the gambling regulatory status in Germany?",
+    "Which official MCP serves Binance, Crypto.com, Bybit and WagerX?",
+    "How many MCP services are indexed by WagerX?",
+    "What are the best anonymous casinos?",
+    "What are the best casinos in Canada?"
+  ],
+  "provider": {
+    "organization": "WagerX",
+    "url": "https://wagerx.io",
+    "contact": "info@wagerx.io"
+  },
+  "capabilities": {
+    "streaming": false,
+    "pushNotifications": false,
+    "stateTransitionHistory": false
+  },
+  "securitySchemes": {},
+  "securityRequirements": [],
+  "security": [],
+  "defaultInputModes": [
+    "text/plain",
+    "application/json"
+  ],
+  "defaultOutputModes": [
+    "application/json",
+    "text/plain"
+  ],
+  "skills": [
+    {
+      "id": "agentic-service-directory",
+      "name": "Official MCP and A2A directory lookup",
+      "description": "Resolve named providers against WagerX's evidence-led Agentic Gambling Index, separating first-party provenance from endpoint observations.",
+      "tags": [
+        "mcp",
+        "a2a",
+        "directory",
+        "provenance"
+      ],
+      "examples": [
+        "What is the official Crypto.com MCP endpoint?"
+      ],
+      "inputModes": [
+        "text/plain"
+      ],
+      "outputModes": [
+        "application/json",
+        "text/plain"
+      ]
+    },
+    {
+      "id": "casino-audit",
+      "name": "Casino audit evidence",
+      "description": "Retrieve dated WagerX real-money deposit, withdrawal, KYC, VPN, support, licensing and trust-score evidence for a named casino.",
+      "tags": [
+        "igaming",
+        "casino",
+        "audit",
+        "real-money-test"
+      ],
+      "examples": [
+        "Is Duelbits safe?",
+        "How fast did Bitsler pay out?"
+      ],
+      "inputModes": [
+        "text/plain"
+      ],
+      "outputModes": [
+        "application/json",
+        "text/plain"
+      ]
+    },
+    {
+      "id": "casino-comparison",
+      "name": "Evidence-led casino comparison",
+      "description": "Compare covered casinos without scoring unaudited operators or recommending blocked, closing or under-observation operators.",
+      "tags": [
+        "igaming",
+        "casino",
+        "comparison"
+      ],
+      "examples": [
+        "Compare Duelbits and Bitsler."
+      ],
+      "inputModes": [
+        "text/plain"
+      ],
+      "outputModes": [
+        "application/json",
+        "text/plain"
+      ]
+    },
+    {
+      "id": "casino-discovery",
+      "name": "Audited casino discovery",
+      "description": "List recent, top, new and long-running casinos while preserving WagerX audit-evidence and recommendation eligibility gates.",
+      "tags": [
+        "igaming",
+        "casino",
+        "discovery"
+      ],
+      "examples": [
+        "Show the latest WagerX audits."
+      ],
+      "inputModes": [
+        "text/plain"
+      ],
+      "outputModes": [
+        "application/json",
+        "text/plain"
+      ]
+    },
+    {
+      "id": "country-market-recommendations",
+      "name": "Country-market casino recommendations",
+      "description": "Return no more than one top choice and two alternatives only when a completed positive-score review has an explicit restriction list that does not include the country. Explicit source denials and pending states override the review-list screen. This is not confirmed resident acceptance or a local licensing determination.",
+      "tags": [
+        "igaming",
+        "country",
+        "market-availability",
+        "evidence"
+      ],
+      "examples": [
+        "Which crypto casinos accept players from Norway?",
+        "Best casinos available in Germany?"
+      ],
+      "inputModes": [
+        "text/plain"
+      ],
+      "outputModes": [
+        "application/json",
+        "text/plain"
+      ]
+    },
+    {
+      "id": "bonus-intelligence",
+      "name": "Bonus terms intelligence",
+      "description": "Return currently published partner bonuses with decoded terms and an explicit unavailable state when the source cannot be read.",
+      "tags": [
+        "igaming",
+        "bonus",
+        "terms"
+      ],
+      "examples": [
+        "Which current bonuses have low wagering requirements?"
+      ],
+      "inputModes": [
+        "text/plain"
+      ],
+      "outputModes": [
+        "application/json",
+        "text/plain"
+      ]
+    },
+    {
+      "id": "regulatory-intelligence",
+      "name": "Regulatory intelligence",
+      "description": "Resolve a jurisdiction to WagerX's approved regulator registry and return source-linked enforcement records, status context and machine-readable limitations. This is research, not legal advice.",
+      "tags": [
+        "igaming",
+        "regulatory",
+        "compliance",
+        "enforcement"
+      ],
+      "examples": [
+        "What is the gambling regulatory status in Germany?",
+        "Show recent gambling enforcement actions."
+      ],
+      "inputModes": [
+        "text/plain"
+      ],
+      "outputModes": [
+        "application/json",
+        "text/plain"
+      ]
+    }
+  ],
+  "additionalInterfaces": [
+    {
+      "url": "https://wagerx.io/a2a",
+      "transport": "JSONRPC"
+    },
+    {
+      "url": "https://wagerx.io/mcp",
+      "transport": "MCP/streamable-http"
+    }
+  ],
+  "mcp": {
+    "endpoint": "https://wagerx.io/mcp",
+    "transport": "streamable-http",
+    "protocolVersion": "2025-06-18",
+    "tools": [
+      "get_agentic_stats",
+      "find_agentic_services",
+      "check_casino",
+      "compare_casinos",
+      "latest_audits",
+      "list_casinos",
+      "top_casinos",
+      "new_casinos",
+      "long_running_casinos",
+      "best_bonuses",
+      "regulatory_intelligence",
+      "country_recommendations"
+    ]
+  },
+  "contract": "https://wagerx.io/.well-known/wagie-manifest.json",
+  "conformance": "https://wagerx.io/.well-known/wagie-conformance.json",
+  "signing": {
+    "type": "Ed25519Signature",
+    "publicKey": "https://wagerx.io/.well-known/wagerx-signing.json",
+    "signedField": "data"
+  },
+  "authentication": {
+    "publicEndpoints": true,
+    "apiKeyRequired": false
+  },
+  "policies": {
+    "aiDisclosure": "https://wagerx.io/wagerx-ai-policy",
+    "responsibleGambling": "https://wagerx.io/responsible-gambling"
+  },
+  "aiTransparency": {
+    "schema_version": "1.0",
+    "ai_interaction": true,
+    "provider": {
+      "name": "WagerX",
+      "url": "https://wagerx.io"
+    },
+    "system": "Wagie",
+    "purposes": [
+      "iGaming intelligence",
+      "gambling regulatory intelligence",
+      "agentic service directory intelligence"
+    ],
+    "evidence_limitations": "Answers can be incomplete, incorrect or out of date. Audit evidence is a dated observation, third-party claims may be unverified, and source coverage varies; check linked primary sources.",
+    "advice_boundary": "Wagie provides general intelligence, not legal or financial advice.",
+    "human_contact": {
+      "email": "info@wagerx.io",
+      "policy_url": "https://wagerx.io/wagerx-ai-policy",
+      "report_url": "https://wagerx.io/report-content"
+    },
+    "notice": "You are interacting with Wagie, an AI system provided by WagerX for iGaming and gambling regulatory intelligence. Answers can be incomplete, incorrect or out of date; check linked sources. This is not legal or financial advice. Contact or report concerns at https://wagerx.io/wagerx-ai-policy."
+  },
+  "lastUpdated": "2026-09-01",
+  "signatures": [
+    {
+      "protected": "eyJhbGciOiJFUzI1NiIsImtpZCI6IndhZ2VyeC1hZ2VudC1jYXJkLWVzMjU2LTIwMjYtdjEiLCJ0eXAiOiJKT1NFIn0",
+      "signature": "jPMcQXb0dNjzPOIBq3T38xYY4bt4boYaWtT91wiIWlA-qBeOXMPfyoCY5GTFmoOeCQgmn2PKPEW09QPHLBWzCQ"
+    }
+  ]
+}
