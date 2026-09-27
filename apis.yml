@@ -30,33 +30,6 @@ tags:
 - A2A
 - Research
 apis:
-- name: WagerX iGaming & Regulatory Intelligence API
-  description: >-
-    Public read-only REST feeds for dated crypto-casino audit evidence (all audits, one audit by slug),
-    the regulatory intelligence alert feed, the Trump Crypto and Slot Hype indexes, latest news, and the
-    agent discovery documents. No authentication; 30 requests/minute per IP; served from the apex domain.
-  humanURL: https://wagerx.io/api
-  image: https://wagerx.io/static/images/wagerx-og-default.png
-  baseURL: https://wagerx.io
-  tags:
-  - Casino Audits
-  - Regulatory Intelligence
-  - Discovery
-  properties:
-  - type: OpenAPI
-    url: openapi/wagerx-io-openapi.yml
-  - type: OpenAPI
-    url: https://wagerx.io/openapi.json
-  - type: Documentation
-    url: https://wagerx.io/agent-gateway
-  - type: Overlay
-    url: overlays/wagerx-io-openapi-overlay.yaml
-  - type: ErrorCatalog
-    url: errors/wagerx-io-problem-types.yml
-  - type: DataModel
-    url: data-model/wagerx-io-data-model.yml
-  - type: RateLimits
-    url: rate-limits/wagerx-io-rate-limits.yml
 - name: Wagie MCP Server
   description: >-
     Remote, anonymous, stateless streamable-HTTP MCP server (protocol 2025-06-18) exposing 12 read-only
@@ -84,8 +57,8 @@ apis:
   description: >-
     A2A JSON-RPC endpoint accepting A2A 1.0 SendMessage and 0.3.0 message/send for bounded iGaming and
     regulatory questions; discovered through a signed Agent Card at /.well-known/agent-card.json (graded
-    conformant to A2A 1.0.0), with sibling cards for the Tech Concierge and the Canada and Anonymous
-    casino agents.
+    conformant to A2A 1.0.0), with sibling cards for the Tech Concierge and the Canada and Anonymous casino
+    agents.
   humanURL: https://wagerx.io/agent-gateway
   image: https://wagerx.io/static/images/wagerx-og-default.png
   baseURL: https://wagerx.io/a2a
@@ -101,6 +74,150 @@ apis:
     url: https://wagerx.io/.well-known/tech-agent.json
   - type: Documentation
     url: https://wagerx.io/agent-gateway
+- aid: wagerx-io:wagerx-io-a2a-api
+  name: WagerX A2a API
+  description: The A2a API from WagerX — 1 operation(s) for a2a.
+  humanURL: https://wagerx.io/api
+  baseURL: https://wagerx.io/mcp
+  tags:
+  - A2a
+  properties:
+  - type: OpenAPI
+    url: openapi/wagerx-io-a2a-api-openapi.yml
+  - type: Documentation
+    url: https://wagerx.io/agent-gateway
+  - type: ErrorCatalog
+    url: errors/wagerx-io-problem-types.yml
+  - type: DataModel
+    url: data-model/wagerx-io-data-model.yml
+  - type: RateLimits
+    url: rate-limits/wagerx-io-rate-limits.yml
+- aid: wagerx-io:wagerx-io-audit-api
+  name: WagerX Audit API
+  description: The Audit API from WagerX — 2 operation(s) for audit.
+  humanURL: https://wagerx.io/api
+  baseURL: https://wagerx.io/mcp
+  tags:
+  - Audit
+  properties:
+  - type: OpenAPI
+    url: openapi/wagerx-io-audit-api-openapi.yml
+  - type: Documentation
+    url: https://wagerx.io/agent-gateway
+  - type: ErrorCatalog
+    url: errors/wagerx-io-problem-types.yml
+  - type: DataModel
+    url: data-model/wagerx-io-data-model.yml
+  - type: RateLimits
+    url: rate-limits/wagerx-io-rate-limits.yml
+- aid: wagerx-io:wagerx-io-mcp-api
+  name: WagerX MCP API
+  description: The Mcp API from WagerX — 1 operation(s) for mcp.
+  humanURL: https://wagerx.io/api
+  baseURL: https://wagerx.io/mcp
+  tags:
+  - Mcp
+  properties:
+  - type: OpenAPI
+    url: openapi/wagerx-io-mcp-api-openapi.yml
+  - type: Documentation
+    url: https://wagerx.io/agent-gateway
+  - type: ErrorCatalog
+    url: errors/wagerx-io-problem-types.yml
+  - type: DataModel
+    url: data-model/wagerx-io-data-model.yml
+  - type: RateLimits
+    url: rate-limits/wagerx-io-rate-limits.yml
+- aid: wagerx-io:wagerx-io-news-api
+  name: WagerX News API
+  description: The News API from WagerX — 1 operation(s) for news.
+  humanURL: https://wagerx.io/api
+  baseURL: https://wagerx.io/mcp
+  tags:
+  - News
+  properties:
+  - type: OpenAPI
+    url: openapi/wagerx-io-news-api-openapi.yml
+  - type: Documentation
+    url: https://wagerx.io/agent-gateway
+  - type: ErrorCatalog
+    url: errors/wagerx-io-problem-types.yml
+  - type: DataModel
+    url: data-model/wagerx-io-data-model.yml
+  - type: RateLimits
+    url: rate-limits/wagerx-io-rate-limits.yml
+- aid: wagerx-io:wagerx-io-regulatory-intel-api
+  name: WagerX Regulatory Intel API
+  description: The Regulatory Intel API from WagerX — 1 operation(s) for regulatory intel.
+  humanURL: https://wagerx.io/api
+  baseURL: https://wagerx.io/mcp
+  tags:
+  - Regulatory Intel
+  properties:
+  - type: OpenAPI
+    url: openapi/wagerx-io-regulatory-intel-api-openapi.yml
+  - type: Documentation
+    url: https://wagerx.io/agent-gateway
+  - type: ErrorCatalog
+    url: errors/wagerx-io-problem-types.yml
+  - type: DataModel
+    url: data-model/wagerx-io-data-model.yml
+  - type: RateLimits
+    url: rate-limits/wagerx-io-rate-limits.yml
+- aid: wagerx-io:wagerx-io-slot-index-api
+  name: WagerX Slot Index API
+  description: The Slot Index API from WagerX — 1 operation(s) for slot index.
+  humanURL: https://wagerx.io/api
+  baseURL: https://wagerx.io/mcp
+  tags:
+  - Slot Index
+  properties:
+  - type: OpenAPI
+    url: openapi/wagerx-io-slot-index-api-openapi.yml
+  - type: Documentation
+    url: https://wagerx.io/agent-gateway
+  - type: ErrorCatalog
+    url: errors/wagerx-io-problem-types.yml
+  - type: DataModel
+    url: data-model/wagerx-io-data-model.yml
+  - type: RateLimits
+    url: rate-limits/wagerx-io-rate-limits.yml
+- aid: wagerx-io:wagerx-io-trump-index-api
+  name: WagerX Trump Index API
+  description: The Trump Index API from WagerX — 1 operation(s) for trump index.
+  humanURL: https://wagerx.io/api
+  baseURL: https://wagerx.io/mcp
+  tags:
+  - Trump Index
+  properties:
+  - type: OpenAPI
+    url: openapi/wagerx-io-trump-index-api-openapi.yml
+  - type: Documentation
+    url: https://wagerx.io/agent-gateway
+  - type: ErrorCatalog
+    url: errors/wagerx-io-problem-types.yml
+  - type: DataModel
+    url: data-model/wagerx-io-data-model.yml
+  - type: RateLimits
+    url: rate-limits/wagerx-io-rate-limits.yml
+- aid: wagerx-io:wagerx-io-well-known-api
+  name: WagerX .well Known API
+  description: The .well Known API from WagerX — 5 operation(s) for .well known.
+  humanURL: https://wagerx.io/api
+  baseURL: https://wagerx.io/mcp
+  tags:
+  - .well Known
+  properties:
+  - type: OpenAPI
+    url: openapi/wagerx-io-well-known-api-openapi.yml
+  - type: Documentation
+    url: https://wagerx.io/agent-gateway
+  - type: ErrorCatalog
+    url: errors/wagerx-io-problem-types.yml
+  - type: DataModel
+    url: data-model/wagerx-io-data-model.yml
+  - type: RateLimits
+    url: rate-limits/wagerx-io-rate-limits.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -186,3 +303,10 @@ x-enrichment:
   status: enriched
   artifacts_added: 23
   pass: local-v3
+x-a2a:
+  verified: true
+  probed: '2026-09-26'
+  url: "https://wagerx.io/.well-known/agent-card.json"
+  grade: "flavored"
+  protocol_version: "1.0"
+  control: 404

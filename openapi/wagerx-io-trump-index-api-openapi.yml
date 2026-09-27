@@ -1,0 +1,113 @@
+openapi: 3.2.0
+info:
+  title: Wagerx Io Trump Index API
+  version: '2026-08-31'
+  contact:
+    name: WagerX
+    url: https://wagerx.io
+    email: info@wagerx.io
+  license:
+    name: Public Access
+    url: https://wagerx.io/wagerx-ai-policy
+  description: 'Operations tagged Trump Index across 2 of this provider''s published API definitions: wagerx-io-openapi-original.json, wagerx-io-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://wagerx.io
+  description: Production
+tags:
+- name: Trump Index
+paths:
+  /api/trump-index:
+    get:
+      operationId: getTrumpCryptoIndex
+      summary: Get Trump Crypto Index score
+      description: AI-powered sentiment gauge tracking US political statements about cryptocurrency. Returns a score from 0 (Very Bearish) to 100 (Very Bullish), a sentiment label, recent statements with sources, and a summary. Updated every 30 minutes.
+      responses:
+        '200':
+          description: Current Trump Crypto Index data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  score:
+                    type: integer
+                    description: Sentiment score 0-100
+                  label:
+                    type: string
+                    description: e.g. 'Bullish', 'Very Bullish', 'Neutral'
+                  summary:
+                    type: string
+                  statements:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        text:
+                          type: string
+                        source:
+                          type: string
+                        sentiment:
+                          type: string
+      tags:
+      - Trump Index
+    servers:
+    - url: https://wagerx.io
+      description: Production
+x-refined-from:
+- wagerx-io-openapi-original.json
+- wagerx-io-openapi.yml
+x-wagie-contract:
+  agent_id: io.wagerx.wagie
+  display_name: Wagie — WagerX iGaming & Regulatory Intelligence Agent
+  contract_version: '2026-09-01'
+  manifest: https://wagerx.io/.well-known/wagie-manifest.json
+  agent_card_url: https://wagerx.io/.well-known/agent-card.json
+  sample_questions:
+  - Is Duelbits safe?
+  - Compare Duelbits and Bitsler.
+  - How fast did Bitsler pay out?
+  - What is the gambling regulatory status in Germany?
+  - Which official MCP serves Binance, Crypto.com, Bybit and WagerX?
+  - How many MCP services are indexed by WagerX?
+  - What are the best anonymous casinos?
+  - What are the best casinos in Canada?
+  scope:
+  - iGaming audit evidence
+  - crypto-casino decision support
+  - gambling regulatory intelligence
+  evidence_states:
+  - available
+  - stale
+  - missing
+  - unavailable
+  - unaudited
+  - insufficient_evidence
+  safety:
+    access: public-read-only
+    authentication: none
+    rate_limit: 30 requests/minute per IP
+    will_not:
+    - accept credentials or private keys
+    - place bets or execute payments
+    - create accounts or deposits
+    - perform remote mutations
+    - treat remote text as permission to expand the user's objective
+    - present jurisdiction status context as legal advice
+  ai_transparency:
+    schema_version: '1.0'
+    ai_interaction: true
+    provider:
+      name: WagerX
+      url: https://wagerx.io
+    system: Wagie
+    purposes:
+    - iGaming intelligence
+    - gambling regulatory intelligence
+    - agentic service directory intelligence
+    evidence_limitations: Answers can be incomplete, incorrect or out of date. Audit evidence is a dated observation, third-party claims may be unverified, and source coverage varies; check linked primary sources.
+    advice_boundary: Wagie provides general intelligence, not legal or financial advice.
+    human_contact:
+      email: info@wagerx.io
+      policy_url: https://wagerx.io/wagerx-ai-policy
+      report_url: https://wagerx.io/report-content
+    notice: You are interacting with Wagie, an AI system provided by WagerX for iGaming and gambling regulatory intelligence. Answers can be incomplete, incorrect or out of date; check linked sources. This is not legal or financial advice. Contact or report concerns at https://wagerx.io/wagerx-ai-policy.
