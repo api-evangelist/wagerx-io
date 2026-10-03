@@ -1,6 +1,7 @@
 openapi: 3.2.0
 info:
-  title: Wagerx Io A2a API
+  title: WagerX iGaming & Regulatory Intelligence A2a API
+  description: Public read-only interfaces for dated crypto-casino audit evidence and approved-source gambling regulatory intelligence. Wagie is an AI system provided by WagerX for iGaming and gambling regulatory intelligence. Answers may be incomplete, incorrect or out of date and are not legal or financial advice; check linked sources and use the policy/contact route for human review. Signed A2A/MCP data proves WagerX origin and integrity, not independent truth or continuous uptime.
   version: '2026-08-31'
   contact:
     name: WagerX
@@ -9,7 +10,6 @@ info:
   license:
     name: Public Access
     url: https://wagerx.io/wagerx-ai-policy
-  description: 'Operations tagged A2a across 2 of this provider''s published API definitions: wagerx-io-openapi-original.json, wagerx-io-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://wagerx.io
   description: Production
@@ -52,9 +52,6 @@ paths:
       x-rateLimit: 30 requests per minute per IP
       tags:
       - A2a
-    servers:
-    - url: https://wagerx.io
-      description: Production
 components:
   schemas:
     A2A10SignedEvidenceResponse:
@@ -144,6 +141,72 @@ components:
           type: array
           items:
             type: string
+    A2A030SignedEvidenceResponse:
+      type: object
+      required:
+      - jsonrpc
+      - id
+      - result
+      properties:
+        jsonrpc:
+          type: string
+          const: '2.0'
+        id: {}
+        result:
+          type: object
+          required:
+          - kind
+          - role
+          - parts
+          properties:
+            kind:
+              type: string
+              const: message
+            role:
+              type: string
+              const: agent
+            parts:
+              type: array
+              contains:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/SignedEvidenceEnvelope'
+    SignedEvidenceEnvelope:
+      type: object
+      required:
+      - data
+      - proof
+      properties:
+        data:
+          $ref: '#/components/schemas/EvidenceFirstData'
+        proof:
+          type: object
+          required:
+          - type
+          - key_id
+          - public_key_url
+          - signed_field
+          - signature
+          properties:
+            type:
+              type: string
+              const: Ed25519Signature
+            key_id:
+              type: string
+            public_key_url:
+              type: string
+              format: uri
+            signed_field:
+              type: string
+              const: data
+            signature:
+              type: string
+            signed_at:
+              type: string
+              format: date-time
     AITransparency:
       type: object
       required:
@@ -186,61 +249,24 @@ components:
           - report_url
         notice:
           type: string
-    A2A030SignedEvidenceResponse:
+    Claim:
       type: object
       required:
-      - jsonrpc
-      - id
-      - result
+      - claim_id
+      - claim
+      - evidence_ids
+      - state
+      - limitations
       properties:
-        jsonrpc:
+        claim_id:
           type: string
-          const: '2.0'
-        id: {}
-        result:
-          type: object
-          required:
-          - kind
-          - role
-          - parts
-          properties:
-            kind:
-              type: string
-              const: message
-            role:
-              type: string
-              const: agent
-            parts:
-              type: array
-              contains:
-                type: object
-                required:
-                - data
-                properties:
-                  data:
-                    $ref: '#/components/schemas/SignedEvidenceEnvelope'
-    EvidenceFirstData:
-      type: object
-      required:
-      - schema_version
-      - answer_id
-      - agent_id
-      - ai_transparency
-      - evidence_state
-      - claims
-      - evidence
-      properties:
-        schema_version:
+        claim:
           type: string
-          example: '2026-08-31'
-        answer_id:
-          type: string
-        agent_id:
-          type: string
-          const: io.wagerx.wagie
-        ai_transparency:
-          $ref: '#/components/schemas/AITransparency'
-        evidence_state:
+        evidence_ids:
+          type: array
+          items:
+            type: string
+        state:
           type: string
           enum:
           - available
@@ -249,48 +275,10 @@ components:
           - unavailable
           - unaudited
           - insufficient_evidence
-        claims:
+        limitations:
           type: array
           items:
-            $ref: '#/components/schemas/Claim'
-        evidence:
-          type: array
-          items:
-            $ref: '#/components/schemas/Evidence'
-      additionalProperties: true
-    SignedEvidenceEnvelope:
-      type: object
-      required:
-      - data
-      - proof
-      properties:
-        data:
-          $ref: '#/components/schemas/EvidenceFirstData'
-        proof:
-          type: object
-          required:
-          - type
-          - key_id
-          - public_key_url
-          - signed_field
-          - signature
-          properties:
-            type:
-              type: string
-              const: Ed25519Signature
-            key_id:
-              type: string
-            public_key_url:
-              type: string
-              format: uri
-            signed_field:
-              type: string
-              const: data
-            signature:
-              type: string
-            signed_at:
-              type: string
-              format: date-time
+            type: string
     A2ADiscovery:
       type: object
       required:
@@ -341,24 +329,28 @@ components:
             type: string
         usage:
           type: string
-    Claim:
+    EvidenceFirstData:
       type: object
       required:
-      - claim_id
-      - claim
-      - evidence_ids
-      - state
-      - limitations
+      - schema_version
+      - answer_id
+      - agent_id
+      - ai_transparency
+      - evidence_state
+      - claims
+      - evidence
       properties:
-        claim_id:
+        schema_version:
           type: string
-        claim:
+          example: '2026-08-31'
+        answer_id:
           type: string
-        evidence_ids:
-          type: array
-          items:
-            type: string
-        state:
+        agent_id:
+          type: string
+          const: io.wagerx.wagie
+        ai_transparency:
+          $ref: '#/components/schemas/AITransparency'
+        evidence_state:
           type: string
           enum:
           - available
@@ -367,13 +359,15 @@ components:
           - unavailable
           - unaudited
           - insufficient_evidence
-        limitations:
+        claims:
           type: array
           items:
-            type: string
-x-refined-from:
-- wagerx-io-openapi-original.json
-- wagerx-io-openapi.yml
+            $ref: '#/components/schemas/Claim'
+        evidence:
+          type: array
+          items:
+            $ref: '#/components/schemas/Evidence'
+      additionalProperties: true
 x-wagie-contract:
   agent_id: io.wagerx.wagie
   display_name: Wagie — WagerX iGaming & Regulatory Intelligence Agent

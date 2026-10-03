@@ -1,6 +1,7 @@
 openapi: 3.2.0
 info:
-  title: Wagerx Io .well Known API
+  title: WagerX iGaming & Regulatory Intelligence .well Known API
+  description: Public read-only interfaces for dated crypto-casino audit evidence and approved-source gambling regulatory intelligence. Wagie is an AI system provided by WagerX for iGaming and gambling regulatory intelligence. Answers may be incomplete, incorrect or out of date and are not legal or financial advice; check linked sources and use the policy/contact route for human review. Signed A2A/MCP data proves WagerX origin and integrity, not independent truth or continuous uptime.
   version: '2026-08-31'
   contact:
     name: WagerX
@@ -9,7 +10,6 @@ info:
   license:
     name: Public Access
     url: https://wagerx.io/wagerx-ai-policy
-  description: 'Operations tagged .well Known across 2 of this provider''s published API definitions: wagerx-io-openapi-original.json, wagerx-io-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://wagerx.io
   description: Production
@@ -30,9 +30,6 @@ paths:
                 $ref: '#/components/schemas/WagieManifest'
       tags:
       - .well Known
-    servers:
-    - url: https://wagerx.io
-      description: Production
   /.well-known/agent-card.json:
     get:
       operationId: getWagieAgentCard
@@ -47,9 +44,6 @@ paths:
                 $ref: '#/components/schemas/AgentCard'
       tags:
       - .well Known
-    servers:
-    - url: https://wagerx.io
-      description: Production
   /.well-known/agent.json:
     get:
       operationId: getLegacyWagieAgentCard
@@ -65,9 +59,6 @@ paths:
                 $ref: '#/components/schemas/AgentCard'
       tags:
       - .well Known
-    servers:
-    - url: https://wagerx.io
-      description: Production
   /.well-known/wagie-health.json:
     get:
       operationId: getWagieHealth
@@ -82,9 +73,6 @@ paths:
                 $ref: '#/components/schemas/ConformanceObservation'
       tags:
       - .well Known
-    servers:
-    - url: https://wagerx.io
-      description: Production
   /.well-known/wagie-conformance.json:
     get:
       operationId: getWagieConformance
@@ -99,9 +87,6 @@ paths:
                 $ref: '#/components/schemas/ConformanceObservation'
       tags:
       - .well Known
-    servers:
-    - url: https://wagerx.io
-      description: Production
 components:
   schemas:
     AgentCard:
@@ -421,9 +406,6 @@ components:
           - report_url
         notice:
           type: string
-x-refined-from:
-- wagerx-io-openapi-original.json
-- wagerx-io-openapi.yml
 x-wagie-contract:
   agent_id: io.wagerx.wagie
   display_name: Wagie — WagerX iGaming & Regulatory Intelligence Agent

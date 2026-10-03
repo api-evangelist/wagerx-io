@@ -1,8 +1,7 @@
 {
   "provider": "wagerx-io",
   "sources": [
-    "_original/wagerx-io-openapi-original.json",
-    "wagerx-io-openapi.yml"
+    "_original/wagerx-io-openapi-original.json"
   ],
   "outputs": [
     "wagerx-io-well-known-api-openapi.yml",
@@ -14,12 +13,11 @@
     "wagerx-io-slot-index-api-openapi.yml",
     "wagerx-io-trump-index-api-openapi.yml"
   ],
-  "archived": [
-    "archived openapi/wagerx-io-openapi.yml"
-  ],
+  "archived": [],
   "errors": [],
   "warnings": [],
   "notes": [
+    "1 archived document(s) dropped as subsets of other archived documents",
     "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
     "wagerx-io-openapi-original.json: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
     "wagerx-io-openapi-original.json: tagged paths GET /api/audit/all -> Audit",
@@ -44,38 +42,17 @@
     "wagerx-io-openapi-original.json: declared missing tag: Regulatory Intel",
     "wagerx-io-openapi-original.json: declared missing tag: Slot Index",
     "wagerx-io-openapi-original.json: declared missing tag: Trump Index",
-    "wagerx-io-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "wagerx-io-openapi.yml: tagged paths GET /api/audit/all -> Audit",
-    "wagerx-io-openapi.yml: tagged paths GET /api/audit/{slug} -> Audit",
-    "wagerx-io-openapi.yml: tagged paths GET /api/trump-index -> Trump Index",
-    "wagerx-io-openapi.yml: tagged paths GET /api/slot-index -> Slot Index",
-    "wagerx-io-openapi.yml: tagged paths GET /api/regulatory-intel -> Regulatory Intel",
-    "wagerx-io-openapi.yml: tagged paths GET /api/news/latest -> News",
-    "wagerx-io-openapi.yml: tagged paths GET /.well-known/wagie-manifest.json -> .well Known",
-    "wagerx-io-openapi.yml: tagged paths GET /.well-known/agent-card.json -> .well Known",
-    "wagerx-io-openapi.yml: tagged paths GET /.well-known/agent.json -> .well Known",
-    "wagerx-io-openapi.yml: tagged paths GET /.well-known/wagie-health.json -> .well Known",
-    "wagerx-io-openapi.yml: tagged paths GET /.well-known/wagie-conformance.json -> .well Known",
-    "wagerx-io-openapi.yml: tagged paths GET /a2a -> A2a",
-    "wagerx-io-openapi.yml: tagged paths POST /a2a -> A2a",
-    "wagerx-io-openapi.yml: tagged paths POST /mcp -> Mcp",
-    "wagerx-io-openapi.yml: declared missing tag: .well Known",
-    "wagerx-io-openapi.yml: declared missing tag: A2a",
-    "wagerx-io-openapi.yml: declared missing tag: Audit",
-    "wagerx-io-openapi.yml: declared missing tag: Mcp",
-    "wagerx-io-openapi.yml: declared missing tag: News",
-    "wagerx-io-openapi.yml: declared missing tag: Regulatory Intel",
-    "wagerx-io-openapi.yml: declared missing tag: Slot Index",
-    "wagerx-io-openapi.yml: declared missing tag: Trump Index",
-    "tag '.well Known' spans 2 source specs (wagerx-io-openapi-original.json, wagerx-io-openapi.yml): per-path servers applied",
-    "tag 'A2a' spans 2 source specs (wagerx-io-openapi-original.json, wagerx-io-openapi.yml): per-path servers applied",
-    "tag 'Audit' spans 2 source specs (wagerx-io-openapi-original.json, wagerx-io-openapi.yml): per-path servers applied",
-    "tag 'Mcp' spans 2 source specs (wagerx-io-openapi-original.json, wagerx-io-openapi.yml): per-path servers applied",
-    "tag 'News' spans 2 source specs (wagerx-io-openapi-original.json, wagerx-io-openapi.yml): per-path servers applied",
-    "tag 'Regulatory Intel' spans 2 source specs (wagerx-io-openapi-original.json, wagerx-io-openapi.yml): per-path servers applied",
-    "tag 'Slot Index' spans 2 source specs (wagerx-io-openapi-original.json, wagerx-io-openapi.yml): per-path servers applied",
-    "tag 'Trump Index' spans 2 source specs (wagerx-io-openapi-original.json, wagerx-io-openapi.yml): per-path servers applied",
-    "apis.yml register: written (+8 apis, 10 total)"
+    "apis.yml register: already-registered"
   ],
-  "skipped": []
+  "skipped": [
+    "_original/wagerx-io-openapi.yml: archived document superseded by a larger archived document",
+    "wagerx-io-a2a-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "wagerx-io-audit-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "wagerx-io-mcp-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "wagerx-io-news-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "wagerx-io-regulatory-intel-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "wagerx-io-slot-index-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "wagerx-io-trump-index-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "wagerx-io-well-known-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }
