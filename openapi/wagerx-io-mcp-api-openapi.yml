@@ -96,217 +96,6 @@ paths:
       - MCP
 components:
   schemas:
-    Evidence:
-      type: object
-      required:
-      - evidence_id
-      - source_name
-      - source_url
-      - authority
-      - published_at
-      - observed_at
-      - retrieved_at
-      - freshness
-      - jurisdiction
-      - evidence_type
-      - limitations
-      properties:
-        evidence_id:
-          type: string
-        source_name:
-          type: string
-        source_url:
-          type:
-          - string
-          - 'null'
-          format: uri
-        authority:
-          type: string
-        published_at:
-          type:
-          - string
-          - 'null'
-        observed_at:
-          type:
-          - string
-          - 'null'
-        retrieved_at:
-          type: string
-          format: date-time
-        freshness:
-          type: string
-          enum:
-          - current
-          - aging
-          - stale
-          - unknown
-        jurisdiction:
-          type:
-          - string
-          - 'null'
-        evidence_type:
-          type: string
-        limitations:
-          type: array
-          items:
-            type: string
-    SignedEvidenceEnvelope:
-      type: object
-      required:
-      - data
-      - proof
-      properties:
-        data:
-          $ref: '#/components/schemas/EvidenceFirstData'
-        proof:
-          type: object
-          required:
-          - type
-          - key_id
-          - public_key_url
-          - signed_field
-          - signature
-          properties:
-            type:
-              type: string
-              const: Ed25519Signature
-            key_id:
-              type: string
-            public_key_url:
-              type: string
-              format: uri
-            signed_field:
-              type: string
-              const: data
-            signature:
-              type: string
-            signed_at:
-              type: string
-              format: date-time
-    MCPResourceTemplatesListResponse:
-      type: object
-      required:
-      - jsonrpc
-      - id
-      - result
-      properties:
-        jsonrpc:
-          type: string
-          const: '2.0'
-        id: {}
-        result:
-          type: object
-          required:
-          - resourceTemplates
-          properties:
-            resourceTemplates:
-              type: array
-    AITransparency:
-      type: object
-      required:
-      - schema_version
-      - ai_interaction
-      - provider
-      - system
-      - purposes
-      - evidence_limitations
-      - advice_boundary
-      - human_contact
-      - notice
-      properties:
-        schema_version:
-          type: string
-        ai_interaction:
-          type: boolean
-          const: true
-        provider:
-          type: object
-          required:
-          - name
-          - url
-        system:
-          type: string
-          const: Wagie
-        purposes:
-          type: array
-          items:
-            type: string
-        evidence_limitations:
-          type: string
-        advice_boundary:
-          type: string
-        human_contact:
-          type: object
-          required:
-          - email
-          - policy_url
-          - report_url
-        notice:
-          type: string
-    MCPResourcesListResponse:
-      type: object
-      required:
-      - jsonrpc
-      - id
-      - result
-      properties:
-        jsonrpc:
-          type: string
-          const: '2.0'
-        id: {}
-        result:
-          type: object
-          required:
-          - resources
-          properties:
-            resources:
-              type: array
-    MCPPromptsListResponse:
-      type: object
-      required:
-      - jsonrpc
-      - id
-      - result
-      properties:
-        jsonrpc:
-          type: string
-          const: '2.0'
-        id: {}
-        result:
-          type: object
-          required:
-          - prompts
-          properties:
-            prompts:
-              type: array
-              items:
-                type: object
-                required:
-                - name
-                - description
-                - arguments
-                properties:
-                  name:
-                    type: string
-                  title:
-                    type: string
-                  description:
-                    type: string
-                  arguments:
-                    type: array
-                    items:
-                      type: object
-                      required:
-                      - name
-                      - description
-                      - required
-                      properties:
-                        name:
-                          type: string
-                        description:
-                          type: string
-                        required:
-                          type: boolean
     Claim:
       type: object
       required:
@@ -368,6 +157,48 @@ components:
               - version
             instructions:
               type: string
+    AITransparency:
+      type: object
+      required:
+      - schema_version
+      - ai_interaction
+      - provider
+      - system
+      - purposes
+      - evidence_limitations
+      - advice_boundary
+      - human_contact
+      - notice
+      properties:
+        schema_version:
+          type: string
+        ai_interaction:
+          type: boolean
+          const: true
+        provider:
+          type: object
+          required:
+          - name
+          - url
+        system:
+          type: string
+          const: Wagie
+        purposes:
+          type: array
+          items:
+            type: string
+        evidence_limitations:
+          type: string
+        advice_boundary:
+          type: string
+        human_contact:
+          type: object
+          required:
+          - email
+          - policy_url
+          - report_url
+        notice:
+          type: string
     MCPToolsListResponse:
       type: object
       required:
@@ -392,6 +223,99 @@ components:
                 - name
                 - description
                 - inputSchema
+    MCPPromptsListResponse:
+      type: object
+      required:
+      - jsonrpc
+      - id
+      - result
+      properties:
+        jsonrpc:
+          type: string
+          const: '2.0'
+        id: {}
+        result:
+          type: object
+          required:
+          - prompts
+          properties:
+            prompts:
+              type: array
+              items:
+                type: object
+                required:
+                - name
+                - description
+                - arguments
+                properties:
+                  name:
+                    type: string
+                  title:
+                    type: string
+                  description:
+                    type: string
+                  arguments:
+                    type: array
+                    items:
+                      type: object
+                      required:
+                      - name
+                      - description
+                      - required
+                      properties:
+                        name:
+                          type: string
+                        description:
+                          type: string
+                        required:
+                          type: boolean
+    MCPPingResponse:
+      type: object
+      required:
+      - jsonrpc
+      - id
+      - result
+      properties:
+        jsonrpc:
+          type: string
+          const: '2.0'
+        id: {}
+        result:
+          type: object
+          maxProperties: 0
+    SignedEvidenceEnvelope:
+      type: object
+      required:
+      - data
+      - proof
+      properties:
+        data:
+          $ref: '#/components/schemas/EvidenceFirstData'
+        proof:
+          type: object
+          required:
+          - type
+          - key_id
+          - public_key_url
+          - signed_field
+          - signature
+          properties:
+            type:
+              type: string
+              const: Ed25519Signature
+            key_id:
+              type: string
+            public_key_url:
+              type: string
+              format: uri
+            signed_field:
+              type: string
+              const: data
+            signature:
+              type: string
+            signed_at:
+              type: string
+              format: date-time
     MCPSignedEvidenceResponse:
       type: object
       required:
@@ -416,7 +340,7 @@ components:
                 type: object
             isError:
               type: boolean
-    MCPPingResponse:
+    MCPResourcesListResponse:
       type: object
       required:
       - jsonrpc
@@ -429,46 +353,29 @@ components:
         id: {}
         result:
           type: object
-          maxProperties: 0
-    EvidenceFirstData:
+          required:
+          - resources
+          properties:
+            resources:
+              type: array
+    MCPResourceTemplatesListResponse:
       type: object
       required:
-      - schema_version
-      - answer_id
-      - agent_id
-      - ai_transparency
-      - evidence_state
-      - claims
-      - evidence
+      - jsonrpc
+      - id
+      - result
       properties:
-        schema_version:
+        jsonrpc:
           type: string
-          example: '2026-08-31'
-        answer_id:
-          type: string
-        agent_id:
-          type: string
-          const: io.wagerx.wagie
-        ai_transparency:
-          $ref: '#/components/schemas/AITransparency'
-        evidence_state:
-          type: string
-          enum:
-          - available
-          - stale
-          - missing
-          - unavailable
-          - unaudited
-          - insufficient_evidence
-        claims:
-          type: array
-          items:
-            $ref: '#/components/schemas/Claim'
-        evidence:
-          type: array
-          items:
-            $ref: '#/components/schemas/Evidence'
-      additionalProperties: true
+          const: '2.0'
+        id: {}
+        result:
+          type: object
+          required:
+          - resourceTemplates
+          properties:
+            resourceTemplates:
+              type: array
     MCPPromptGetResponse:
       type: object
       required:
@@ -511,6 +418,99 @@ components:
                         const: text
                       text:
                         type: string
+    Evidence:
+      type: object
+      required:
+      - evidence_id
+      - source_name
+      - source_url
+      - authority
+      - published_at
+      - observed_at
+      - retrieved_at
+      - freshness
+      - jurisdiction
+      - evidence_type
+      - limitations
+      properties:
+        evidence_id:
+          type: string
+        source_name:
+          type: string
+        source_url:
+          type:
+          - string
+          - 'null'
+          format: uri
+        authority:
+          type: string
+        published_at:
+          type:
+          - string
+          - 'null'
+        observed_at:
+          type:
+          - string
+          - 'null'
+        retrieved_at:
+          type: string
+          format: date-time
+        freshness:
+          type: string
+          enum:
+          - current
+          - aging
+          - stale
+          - unknown
+        jurisdiction:
+          type:
+          - string
+          - 'null'
+        evidence_type:
+          type: string
+        limitations:
+          type: array
+          items:
+            type: string
+    EvidenceFirstData:
+      type: object
+      required:
+      - schema_version
+      - answer_id
+      - agent_id
+      - ai_transparency
+      - evidence_state
+      - claims
+      - evidence
+      properties:
+        schema_version:
+          type: string
+          example: '2026-08-31'
+        answer_id:
+          type: string
+        agent_id:
+          type: string
+          const: io.wagerx.wagie
+        ai_transparency:
+          $ref: '#/components/schemas/AITransparency'
+        evidence_state:
+          type: string
+          enum:
+          - available
+          - stale
+          - missing
+          - unavailable
+          - unaudited
+          - insufficient_evidence
+        claims:
+          type: array
+          items:
+            $ref: '#/components/schemas/Claim'
+        evidence:
+          type: array
+          items:
+            $ref: '#/components/schemas/Evidence'
+      additionalProperties: true
 x-wagie-contract:
   agent_id: io.wagerx.wagie
   display_name: Wagie — WagerX iGaming & Regulatory Intelligence Agent

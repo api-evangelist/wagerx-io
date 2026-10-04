@@ -150,6 +150,90 @@ components:
           items:
             type: object
       additionalProperties: true
+    ConformanceObservation:
+      type: object
+      properties:
+        agent_id:
+          type: string
+        agent_name:
+          type: string
+        contract_version:
+          type: string
+        observed_at:
+          type: string
+          format: date-time
+        status:
+          type: string
+          enum:
+          - operational
+          - degraded
+          - error
+        stages:
+          type: array
+          items:
+            type: object
+            properties:
+              stage:
+                type: string
+              claim:
+                type: string
+              status:
+                type: string
+                enum:
+                - pass
+                - degraded
+                - fail
+              observed_at:
+                type: string
+                format: date-time
+              details:
+                type: object
+              limitations:
+                type: array
+                items:
+                  type: string
+    AITransparency:
+      type: object
+      required:
+      - schema_version
+      - ai_interaction
+      - provider
+      - system
+      - purposes
+      - evidence_limitations
+      - advice_boundary
+      - human_contact
+      - notice
+      properties:
+        schema_version:
+          type: string
+        ai_interaction:
+          type: boolean
+          const: true
+        provider:
+          type: object
+          required:
+          - name
+          - url
+        system:
+          type: string
+          const: Wagie
+        purposes:
+          type: array
+          items:
+            type: string
+        evidence_limitations:
+          type: string
+        advice_boundary:
+          type: string
+        human_contact:
+          type: object
+          required:
+          - email
+          - policy_url
+          - report_url
+        notice:
+          type: string
     WagieManifest:
       type: object
       required:
@@ -322,90 +406,6 @@ components:
           type: object
         claim_boundaries:
           type: object
-    ConformanceObservation:
-      type: object
-      properties:
-        agent_id:
-          type: string
-        agent_name:
-          type: string
-        contract_version:
-          type: string
-        observed_at:
-          type: string
-          format: date-time
-        status:
-          type: string
-          enum:
-          - operational
-          - degraded
-          - error
-        stages:
-          type: array
-          items:
-            type: object
-            properties:
-              stage:
-                type: string
-              claim:
-                type: string
-              status:
-                type: string
-                enum:
-                - pass
-                - degraded
-                - fail
-              observed_at:
-                type: string
-                format: date-time
-              details:
-                type: object
-              limitations:
-                type: array
-                items:
-                  type: string
-    AITransparency:
-      type: object
-      required:
-      - schema_version
-      - ai_interaction
-      - provider
-      - system
-      - purposes
-      - evidence_limitations
-      - advice_boundary
-      - human_contact
-      - notice
-      properties:
-        schema_version:
-          type: string
-        ai_interaction:
-          type: boolean
-          const: true
-        provider:
-          type: object
-          required:
-          - name
-          - url
-        system:
-          type: string
-          const: Wagie
-        purposes:
-          type: array
-          items:
-            type: string
-        evidence_limitations:
-          type: string
-        advice_boundary:
-          type: string
-        human_contact:
-          type: object
-          required:
-          - email
-          - policy_url
-          - report_url
-        notice:
-          type: string
 x-wagie-contract:
   agent_id: io.wagerx.wagie
   display_name: Wagie — WagerX iGaming & Regulatory Intelligence Agent
