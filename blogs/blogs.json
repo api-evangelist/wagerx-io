@@ -1,0 +1,28 @@
+{
+  "repo": "wagerx-io",
+  "feeds": [
+    {
+      "source": "https://wagerx.io/news",
+      "feed_url": "https://wagerx.io/news",
+      "title": "",
+      "saved": 0,
+      "method": "none"
+    },
+    {
+      "source": "https://wagerx.io/about-us",
+      "feed_url": "https://wagerx.io/rss.xml",
+      "title": "",
+      "saved": 0,
+      "method": "discovered"
+    },
+    {
+      "source": "https://wagerx.io/rss.xml",
+      "feed_url": "https://wagerx.io/rss.xml",
+      "title": "",
+      "saved": 0,
+      "method": "feed"
+    }
+  ],
+  "post_count": 30,
+  "fetched": "2026-10-03T12:30:02Z"
+}

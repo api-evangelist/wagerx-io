@@ -80,6 +80,8 @@ apis:
   humanURL: https://wagerx.io/api
   baseURL: https://wagerx.io/mcp
   tags:
+  - A2A
+  tags_raw:
   - A2a
   properties:
   - type: OpenAPI
@@ -116,6 +118,8 @@ apis:
   humanURL: https://wagerx.io/api
   baseURL: https://wagerx.io/mcp
   tags:
+  - MCP
+  tags_raw:
   - Mcp
   properties:
   - type: OpenAPI
