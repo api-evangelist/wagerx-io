@@ -228,6 +228,8 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Pricing
+  url: https://wagerx.io/agent-gateway
 - type: Website
   url: https://wagerx.io/
 - type: DeveloperPortal
