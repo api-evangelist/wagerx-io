@@ -31,3 +31,16 @@ paid_services:
   url: https://wagerx.io/agentic-gambling-services
   http_status: 200
 note: No /pricing page exists (404). There is exactly one access level and it is free.
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - metered
+  units: []
+  plans:
+  - name: Public read-only access
+    access: other
+    model: metered
+    model_how: derived
+    units: []
+    periods: []
