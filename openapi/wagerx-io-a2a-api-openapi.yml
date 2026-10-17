@@ -54,32 +54,89 @@ paths:
       - A2a
 components:
   schemas:
-    Claim:
+    A2A030SignedEvidenceResponse:
       type: object
       required:
-      - claim_id
-      - claim
-      - evidence_ids
-      - state
+      - jsonrpc
+      - id
+      - result
+      properties:
+        jsonrpc:
+          type: string
+          const: '2.0'
+        id: {}
+        result:
+          type: object
+          required:
+          - kind
+          - role
+          - parts
+          properties:
+            kind:
+              type: string
+              const: message
+            role:
+              type: string
+              const: agent
+            parts:
+              type: array
+              contains:
+                type: object
+                required:
+                - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/SignedEvidenceEnvelope'
+    Evidence:
+      type: object
+      required:
+      - evidence_id
+      - source_name
+      - source_url
+      - authority
+      - published_at
+      - observed_at
+      - retrieved_at
+      - freshness
+      - jurisdiction
+      - evidence_type
       - limitations
       properties:
-        claim_id:
+        evidence_id:
           type: string
-        claim:
+        source_name:
           type: string
-        evidence_ids:
-          type: array
-          items:
-            type: string
-        state:
+        source_url:
+          type:
+          - string
+          - 'null'
+          format: uri
+        authority:
+          type: string
+        published_at:
+          type:
+          - string
+          - 'null'
+        observed_at:
+          type:
+          - string
+          - 'null'
+        retrieved_at:
+          type: string
+          format: date-time
+        freshness:
           type: string
           enum:
-          - available
+          - current
+          - aging
           - stale
-          - missing
-          - unavailable
-          - unaudited
-          - insufficient_evidence
+          - unknown
+        jurisdiction:
+          type:
+          - string
+          - 'null'
+        evidence_type:
+          type: string
         limitations:
           type: array
           items:
@@ -167,39 +224,39 @@ components:
             type: string
         usage:
           type: string
-    A2A030SignedEvidenceResponse:
+    SignedEvidenceEnvelope:
       type: object
       required:
-      - jsonrpc
-      - id
-      - result
+      - data
+      - proof
       properties:
-        jsonrpc:
-          type: string
-          const: '2.0'
-        id: {}
-        result:
+        data:
+          $ref: '#/components/schemas/EvidenceFirstData'
+        proof:
           type: object
           required:
-          - kind
-          - role
-          - parts
+          - type
+          - key_id
+          - public_key_url
+          - signed_field
+          - signature
           properties:
-            kind:
+            type:
               type: string
-              const: message
-            role:
+              const: Ed25519Signature
+            key_id:
               type: string
-              const: agent
-            parts:
-              type: array
-              contains:
-                type: object
-                required:
-                - data
-                properties:
-                  data:
-                    $ref: '#/components/schemas/SignedEvidenceEnvelope'
+            public_key_url:
+              type: string
+              format: uri
+            signed_field:
+              type: string
+              const: data
+            signature:
+              type: string
+            signed_at:
+              type: string
+              format: date-time
     AITransparency:
       type: object
       required:
@@ -242,89 +299,32 @@ components:
           - report_url
         notice:
           type: string
-    SignedEvidenceEnvelope:
+    Claim:
       type: object
       required:
-      - data
-      - proof
-      properties:
-        data:
-          $ref: '#/components/schemas/EvidenceFirstData'
-        proof:
-          type: object
-          required:
-          - type
-          - key_id
-          - public_key_url
-          - signed_field
-          - signature
-          properties:
-            type:
-              type: string
-              const: Ed25519Signature
-            key_id:
-              type: string
-            public_key_url:
-              type: string
-              format: uri
-            signed_field:
-              type: string
-              const: data
-            signature:
-              type: string
-            signed_at:
-              type: string
-              format: date-time
-    Evidence:
-      type: object
-      required:
-      - evidence_id
-      - source_name
-      - source_url
-      - authority
-      - published_at
-      - observed_at
-      - retrieved_at
-      - freshness
-      - jurisdiction
-      - evidence_type
+      - claim_id
+      - claim
+      - evidence_ids
+      - state
       - limitations
       properties:
-        evidence_id:
+        claim_id:
           type: string
-        source_name:
+        claim:
           type: string
-        source_url:
-          type:
-          - string
-          - 'null'
-          format: uri
-        authority:
-          type: string
-        published_at:
-          type:
-          - string
-          - 'null'
-        observed_at:
-          type:
-          - string
-          - 'null'
-        retrieved_at:
-          type: string
-          format: date-time
-        freshness:
+        evidence_ids:
+          type: array
+          items:
+            type: string
+        state:
           type: string
           enum:
-          - current
-          - aging
+          - available
           - stale
-          - unknown
-        jurisdiction:
-          type:
-          - string
-          - 'null'
-        evidence_type:
-          type: string
+          - missing
+          - unavailable
+          - unaudited
+          - insufficient_evidence
         limitations:
           type: array
           items:
