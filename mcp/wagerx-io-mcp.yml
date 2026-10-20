@@ -209,3 +209,67 @@ tool_quality:
   scored: false
   note: Facts from the saved tools/list capture (mcp_tool_quality.py); recorded, not scored. Checks learned
     from Glimind's agent-readiness audit.
+tools:
+- name: get_agentic_stats
+  description: Return deterministic, aggregate-only statistics about the selective WagerX Agentic Index,
+    latest MCP/A2A endpoint observations, or machine requests received by WagerX. Official provenance,
+    editorial status and endpoint health remain separate. Activity counts are requests, not unique agents,
+    and never expose raw queries, IP addresses, user agents or geography.
+- name: find_agentic_services
+  description: Look up official and community MCP/A2A products in the WagerX Agentic Gambling Index. Returns
+    exact hosted endpoints or local setup links, first-party provenance, WagerX evidence status, access
+    model and limitations. Use for questions such as "What is the official Crypto.com MCP?", "Which MCP
+    is official for Binance, Bybit and WagerX?", or "Is ahel.io in the directory?". This lookup never
+    executes remote tools.
+- name: check_casino
+  description: 'Get the WagerX forensic audit verdict for one crypto casino: trust score (1-10), audit
+    status, latest real-money live test (deposit/withdrawal amounts and timing, support response, KYC
+    triggered or not), license and review link. Data comes from hand-run real-money tests, not scraped
+    reviews. Use for questions like "Is Duelbits legit?", "Is Stake safe or a scam?", "What is bspin''s
+    trust score?", "Does Rollbit require KYC?". Example call: {"name": "Duelbits"} -> trust_score 9.5,
+    status "Verified & Safe", live test "0.6 SOL withdrawal instant, no KYC".'
+- name: compare_casinos
+  description: 'Compare 2-5 crypto casinos side by side on WagerX audit data: trust score, latest real-money
+    live test, KYC policy, withdrawal speed, license. Use for "Duelbits vs BC.Game?", "Which is safer,
+    Stake or Rollbit?", "bspin or Bitsler for fast payouts?". Example call: {"names": ["Duelbits", "Stake"]}.'
+- name: latest_audits
+  description: 'List the most recent WagerX real-money casino audits, newest first, each with real deposit/withdrawal
+    amounts, payout timing and support response. Use for "What are the latest casino audits?", "Which
+    casinos were tested this week?", "freshest crypto casino safety data". Example call: {"limit": 5}.'
+- name: list_casinos
+  description: List every casino WagerX holds forensic audit data on (40+ operators), with trust score
+    and audit status. Use to discover coverage before calling check_casino, or for "which casinos does
+    WagerX cover?". Takes no arguments.
+- name: top_casinos
+  description: 'Best crypto casinos ranked by WagerX audit trust score — only casinos with completed real-money
+    deposit/withdrawal tests are ranked (payout speed, KYC, support, license all factor in). Use for "best
+    crypto casino 2026", "safest bitcoin casino", "most trusted no-KYC-detected casino", "top crypto gambling
+    site". A dated no-KYC observation is not an anonymity guarantee. Example call: {"limit": 10}.'
+- name: new_casinos
+  description: Newest crypto casinos on the WagerX radar, including ones still mid-audit (clearly marked,
+    never scored before the withdrawal test completes). Use for "new crypto casinos 2026", "newest bitcoin
+    casinos worth trying", "casinos currently under audit". Takes no arguments.
+- name: long_running_casinos
+  description: List crypto casino brands by documented launch year, oldest first, paired with current
+    WagerX audit evidence and ownership/licensing continuity caveats. This is operating history, not a
+    safety ranking. Use for "oldest crypto casinos", "established bitcoin casinos", or "long-running gambling
+    sites". Takes no arguments.
+- name: best_bonuses
+  description: 'Current best crypto casino bonuses with the fine print decoded from the casino''s own
+    T&Cs: wagering requirement, max bonus, max cashout, free spins, min deposit, and a real-value score
+    (headline % is a marketing metric — the decoded terms are what matter). Expired promos excluded. Use
+    for "best crypto casino bonus", "deposit match with low wagering", "is the X welcome bonus worth it?".
+    Example call: {"limit": 5} or {"casino": "BetUS"}.'
+- name: regulatory_intelligence
+  description: 'Get gambling regulatory context for a jurisdiction plus recent source-linked enforcement
+    records. Jurisdictions resolve through WagerX''s approved regulator registry; records whose URL does
+    not match an approved authority domain are excluded. Returns explicit missing/unavailable states and
+    is research, not legal advice. Example: {"jurisdiction": "Germany", "limit": 5}. Omit jurisdiction
+    for a bounded global list.'
+- name: country_recommendations
+  description: Return at most one top choice and two alternatives for a country, from completed scored
+    reviews whose explicit restriction list does not include that country, with explicit source denials
+    and pending states taking precedence. This is a review-list screen, not confirmed resident acceptance
+    or local licensing; explicit dated source evidence is retained when available. Review links are canonical
+    WagerX links and recommendations are not affiliate offers.
+tools_count: 12
