@@ -1,1 +1,306 @@
-{"id":1,"jsonrpc":"2.0","result":{"tools":[{"description":"Current local time for an IANA timezone or documented major-city alias.","inputSchema":{"additionalProperties":false,"properties":{"location":{"type":"string"}},"required":["location"],"type":"object"},"name":"get_local_time"},{"description":"Nager.Date public holidays for WagerX Tech\u2019s explicit 40-country allowlist.","inputSchema":{"additionalProperties":false,"properties":{"country":{"description":"ISO 3166-1 alpha-2 code.","type":"string"},"year":{"maximum":2100,"minimum":2000,"type":"integer"}},"required":["country","year"],"type":"object"},"name":"get_public_holidays"},{"description":"ECB reference/cross-rate conversion on published business dates only.","inputSchema":{"additionalProperties":false,"properties":{"amount":{"default":1,"type":"number"},"base":{"maxLength":3,"minLength":3,"type":"string"},"date":{"format":"date","type":"string"},"quote":{"maxLength":3,"minLength":3,"type":"string"}},"required":["base","quote"],"type":"object"},"name":"get_exchange_rate"},{"description":"Global forecast from the commercial Open-Meteo customer endpoint. Explicitly unavailable until OPEN_METEO_API_KEY is configured.","inputSchema":{"additionalProperties":false,"properties":{"latitude":{"maximum":90,"minimum":-90,"type":"number"},"longitude":{"maximum":180,"minimum":-180,"type":"number"},"timezone":{"default":"auto","type":"string"}},"required":["latitude","longitude"],"type":"object"},"name":"get_weather_forecast"},{"description":"Active official weather.gov alerts for US state/DC postal codes; no global-alert claim.","inputSchema":{"additionalProperties":false,"properties":{"area":{"maxLength":2,"minLength":2,"type":"string"}},"required":["area"],"type":"object"},"name":"get_us_weather_alerts"},{"description":"Read-only public wallet balance and network lookup. The result reports provider coverage, freshness, priced and unpriced holdings; it never moves funds or requires a private key.","inputSchema":{"additionalProperties":false,"properties":{"address":{"description":"A supported public BTC, EVM, Solana, Litecoin or Dogecoin address.","maxLength":100,"minLength":1,"type":"string"}},"required":["address"],"type":"object"},"name":"check_wallet_balance"},{"description":"Deterministic, read-only explanation of a freshly checked public wallet result. Supported topics are overview, missing prices, networks, incomplete totals, quantity versus valuation and priced asset allocation; it does not provide financial advice.","inputSchema":{"additionalProperties":false,"properties":{"address":{"maxLength":100,"minLength":1,"type":"string"},"question":{"default":"","maxLength":500,"type":"string"}},"required":["address"],"type":"object"},"name":"explain_wallet_result"},{"description":"Read-only current reference prices for BTC, ETH and SOL. Provider source and observation timestamp are returned.","inputSchema":{"additionalProperties":false,"properties":{"assets":{"items":{"enum":["BTC","ETH","SOL"],"type":"string"},"maxItems":3,"minItems":1,"type":"array","uniqueItems":true}},"required":["assets"],"type":"object"},"name":"get_crypto_prices"},{"description":"Read-only reference conversion between USD, BTC, ETH and SOL. This is not an execution price or liquidity guarantee.","inputSchema":{"additionalProperties":false,"properties":{"amount":{"oneOf":[{"exclusiveMinimum":0,"maximum":1000000000000,"multipleOf":1e-12,"type":"number"},{"maxLength":26,"minLength":1,"pattern":"^\\d+(?:\\.\\d{1,12})?$","type":"string"}]},"from_asset":{"enum":["USD","BTC","ETH","SOL"],"type":"string"},"to_asset":{"enum":["USD","BTC","ETH","SOL"],"type":"string"}},"required":["amount","from_asset","to_asset"],"type":"object"},"name":"convert_crypto_amount"}]}}
+{
+  "endpoint": "https://wagerx.io/mcp",
+  "captured": "2026-10-20",
+  "method": "initialize + tools/list (anonymous, no tool called; roadmap#992)",
+  "protocol_version": "2025-06-18",
+  "server_info": {
+    "name": "WagerX iGaming & Regulatory Intelligence MCP",
+    "title": "Wagie — WagerX iGaming & Regulatory Intelligence Agent",
+    "version": "2026-09-01"
+  },
+  "result": {
+    "tools": [
+      {
+        "annotations": {
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": true,
+          "readOnlyHint": true,
+          "title": "Get agentic stats"
+        },
+        "description": "Return deterministic, aggregate-only statistics about the selective WagerX Agentic Index, latest MCP/A2A endpoint observations, or machine requests received by WagerX. Official provenance, editorial status and endpoint health remain separate. Activity counts are requests, not unique agents, and never expose raw queries, IP addresses, user agents or geography.",
+        "inputSchema": {
+          "properties": {
+            "period": {
+              "default": "30d",
+              "description": "Used by activity statistics.",
+              "enum": [
+                "24h",
+                "7d",
+                "30d",
+                "90d",
+                "all"
+              ],
+              "type": "string"
+            },
+            "scope": {
+              "default": "overview",
+              "enum": [
+                "overview",
+                "catalog",
+                "endpoints",
+                "activity"
+              ],
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "name": "get_agentic_stats",
+        "title": "Get agentic stats"
+      },
+      {
+        "annotations": {
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": true,
+          "readOnlyHint": true,
+          "title": "Find agentic services"
+        },
+        "description": "Look up official and community MCP/A2A products in the WagerX Agentic Gambling Index. Returns exact hosted endpoints or local setup links, first-party provenance, WagerX evidence status, access model and limitations. Use for questions such as \"What is the official Crypto.com MCP?\", \"Which MCP is official for Binance, Bybit and WagerX?\", or \"Is ahel.io in the directory?\". This lookup never executes remote tools.",
+        "inputSchema": {
+          "properties": {
+            "query": {
+              "description": "Provider, product, domain, protocol or directory question.",
+              "maxLength": 500,
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "required": [
+            "query"
+          ],
+          "type": "object"
+        },
+        "name": "find_agentic_services",
+        "title": "Find agentic services"
+      },
+      {
+        "annotations": {
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": true,
+          "readOnlyHint": true,
+          "title": "Check casino"
+        },
+        "description": "Get the WagerX forensic audit verdict for one crypto casino: trust score (1-10), audit status, latest real-money live test (deposit/withdrawal amounts and timing, support response, KYC triggered or not), license and review link. Data comes from hand-run real-money tests, not scraped reviews. Use for questions like \"Is Duelbits legit?\", \"Is Stake safe or a scam?\", \"What is bspin's trust score?\", \"Does Rollbit require KYC?\". Example call: {\"name\": \"Duelbits\"} -> trust_score 9.5, status \"Verified & Safe\", live test \"0.6 SOL withdrawal instant, no KYC\".",
+        "inputSchema": {
+          "properties": {
+            "name": {
+              "description": "Casino name or common alias, e.g. \"Duelbits\", \"Fortune Jack\", \"TG Casino\". Case-insensitive, fuzzy-matched.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "name"
+          ],
+          "type": "object"
+        },
+        "name": "check_casino",
+        "title": "Check casino"
+      },
+      {
+        "annotations": {
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": true,
+          "readOnlyHint": true,
+          "title": "Compare casinos"
+        },
+        "description": "Compare 2-5 crypto casinos side by side on WagerX audit data: trust score, latest real-money live test, KYC policy, withdrawal speed, license. Use for \"Duelbits vs BC.Game?\", \"Which is safer, Stake or Rollbit?\", \"bspin or Bitsler for fast payouts?\". Example call: {\"names\": [\"Duelbits\", \"Stake\"]}.",
+        "inputSchema": {
+          "properties": {
+            "names": {
+              "items": {
+                "type": "string"
+              },
+              "maxItems": 5,
+              "minItems": 2,
+              "type": "array"
+            }
+          },
+          "required": [
+            "names"
+          ],
+          "type": "object"
+        },
+        "name": "compare_casinos",
+        "title": "Compare casinos"
+      },
+      {
+        "annotations": {
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": true,
+          "readOnlyHint": true,
+          "title": "Latest audits"
+        },
+        "description": "List the most recent WagerX real-money casino audits, newest first, each with real deposit/withdrawal amounts, payout timing and support response. Use for \"What are the latest casino audits?\", \"Which casinos were tested this week?\", \"freshest crypto casino safety data\". Example call: {\"limit\": 5}.",
+        "inputSchema": {
+          "properties": {
+            "limit": {
+              "default": 10,
+              "maximum": 25,
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          "type": "object"
+        },
+        "name": "latest_audits",
+        "title": "Latest audits"
+      },
+      {
+        "annotations": {
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": true,
+          "readOnlyHint": true,
+          "title": "List casinos"
+        },
+        "description": "List every casino WagerX holds forensic audit data on (40+ operators), with trust score and audit status. Use to discover coverage before calling check_casino, or for \"which casinos does WagerX cover?\". Takes no arguments.",
+        "inputSchema": {
+          "properties": {},
+          "type": "object"
+        },
+        "name": "list_casinos",
+        "title": "List casinos"
+      },
+      {
+        "annotations": {
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": true,
+          "readOnlyHint": true,
+          "title": "Top casinos"
+        },
+        "description": "Best crypto casinos ranked by WagerX audit trust score — only casinos with completed real-money deposit/withdrawal tests are ranked (payout speed, KYC, support, license all factor in). Use for \"best crypto casino 2026\", \"safest bitcoin casino\", \"most trusted no-KYC-detected casino\", \"top crypto gambling site\". A dated no-KYC observation is not an anonymity guarantee. Example call: {\"limit\": 10}.",
+        "inputSchema": {
+          "properties": {
+            "limit": {
+              "default": 10,
+              "maximum": 25,
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          "type": "object"
+        },
+        "name": "top_casinos",
+        "title": "Top casinos"
+      },
+      {
+        "annotations": {
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": true,
+          "readOnlyHint": true,
+          "title": "New casinos"
+        },
+        "description": "Newest crypto casinos on the WagerX radar, including ones still mid-audit (clearly marked, never scored before the withdrawal test completes). Use for \"new crypto casinos 2026\", \"newest bitcoin casinos worth trying\", \"casinos currently under audit\". Takes no arguments.",
+        "inputSchema": {
+          "properties": {},
+          "type": "object"
+        },
+        "name": "new_casinos",
+        "title": "New casinos"
+      },
+      {
+        "annotations": {
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": true,
+          "readOnlyHint": true,
+          "title": "Long running casinos"
+        },
+        "description": "List crypto casino brands by documented launch year, oldest first, paired with current WagerX audit evidence and ownership/licensing continuity caveats. This is operating history, not a safety ranking. Use for \"oldest crypto casinos\", \"established bitcoin casinos\", or \"long-running gambling sites\". Takes no arguments.",
+        "inputSchema": {
+          "properties": {},
+          "type": "object"
+        },
+        "name": "long_running_casinos",
+        "title": "Long running casinos"
+      },
+      {
+        "annotations": {
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": true,
+          "readOnlyHint": true,
+          "title": "Best bonuses"
+        },
+        "description": "Current best crypto casino bonuses with the fine print decoded from the casino's own T&Cs: wagering requirement, max bonus, max cashout, free spins, min deposit, and a real-value score (headline % is a marketing metric — the decoded terms are what matter). Expired promos excluded. Use for \"best crypto casino bonus\", \"deposit match with low wagering\", \"is the X welcome bonus worth it?\". Example call: {\"limit\": 5} or {\"casino\": \"BetUS\"}.",
+        "inputSchema": {
+          "properties": {
+            "casino": {
+              "description": "Optional: only bonuses from this casino",
+              "type": "string"
+            },
+            "limit": {
+              "default": 10,
+              "maximum": 25,
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          "type": "object"
+        },
+        "name": "best_bonuses",
+        "title": "Best bonuses"
+      },
+      {
+        "annotations": {
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": true,
+          "readOnlyHint": true,
+          "title": "Regulatory intelligence"
+        },
+        "description": "Get gambling regulatory context for a jurisdiction plus recent source-linked enforcement records. Jurisdictions resolve through WagerX's approved regulator registry; records whose URL does not match an approved authority domain are excluded. Returns explicit missing/unavailable states and is research, not legal advice. Example: {\"jurisdiction\": \"Germany\", \"limit\": 5}. Omit jurisdiction for a bounded global list.",
+        "inputSchema": {
+          "properties": {
+            "jurisdiction": {
+              "description": "Optional country, jurisdiction or regulator name, for example \"Germany\", \"UK\" or \"GGL\".",
+              "type": "string"
+            },
+            "limit": {
+              "default": 8,
+              "maximum": 25,
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          "type": "object"
+        },
+        "name": "regulatory_intelligence",
+        "title": "Regulatory intelligence"
+      },
+      {
+        "annotations": {
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": true,
+          "readOnlyHint": true,
+          "title": "Country recommendations"
+        },
+        "description": "Return at most one top choice and two alternatives for a country, from completed scored reviews whose explicit restriction list does not include that country, with explicit source denials and pending states taking precedence. This is a review-list screen, not confirmed resident acceptance or local licensing; explicit dated source evidence is retained when available. Review links are canonical WagerX links and recommendations are not affiliate offers.",
+        "inputSchema": {
+          "properties": {
+            "country": {
+              "description": "Country name, ISO alpha-2 code or common alias.",
+              "maxLength": 100,
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "required": [
+            "country"
+          ],
+          "type": "object"
+        },
+        "name": "country_recommendations",
+        "title": "Country recommendations"
+      }
+    ]
+  }
+}
