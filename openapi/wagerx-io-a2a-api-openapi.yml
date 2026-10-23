@@ -423,3 +423,9 @@ x-wagie-contract:
       policy_url: https://wagerx.io/wagerx-ai-policy
       report_url: https://wagerx.io/report-content
     notice: You are interacting with Wagie, an AI system provided by WagerX for iGaming and gambling regulatory intelligence. Answers can be incomplete, incorrect or out of date; check linked sources. This is not legal or financial advice. Contact or report concerns at https://wagerx.io/wagerx-ai-policy.
+x-provenance:
+  method: harvested
+  publisher: WagerX
+  source: https://wagerx.io/openapi.json
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)
